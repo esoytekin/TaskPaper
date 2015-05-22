@@ -125,6 +125,17 @@ public class TodoRest {
 		taskPaperServices.deleteTask(t);
 	}
 	
+	@RequestMapping(value="/taskUpdate",method=RequestMethod.POST)
+	@ResponseBody
+	public void updateTask(@RequestParam Long id, @RequestParam String description){
+		if(id==null)
+			return;
+		Task t = taskPaperServices.getTaskById(id);
+		t.setDescription(description);
+		taskPaperServices.updateTask(t);
+		
+	}
+	
 	
 	@RequestMapping(value="/subtask/delete",method=RequestMethod.POST)
 	@ResponseBody

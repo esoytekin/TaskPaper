@@ -27,7 +27,7 @@ progressBar.getModalHeader().hide();
 progressBar.getModalFooter().hide();
 var todoTask = function(description,rawDate){
     var self = this; 
-    self.description =  description;
+    self.description =  ko.observable( description );
     self.done = ko.observable(false);
     self.favorite = ko.observable(false);
     self.note = ko.observable('');
@@ -130,7 +130,6 @@ function TasksViewModel() {
     self.selectedCategory= ko.observable();
     self.selectedController = ko.observable();
     self.selectedTask = ko.observable('');
-    self.selectedTaskDescription = ko.observable('');
     self.selectedNote= ko.observable('');
     self.handleError = function(jqXHR){
          console.log("ajax error " + jqXHR.status);
@@ -479,10 +478,8 @@ function TasksViewModel() {
     self.taskClick = function(){ 
     	if(this.description === self.selectedTask().description){
     		self.selectedTask(''); 
-    		self.selectedTaskDescription('');
     	}else{ 
     		self.selectedTask(this); 
-    		self.selectedTaskDescription(this.description);
             self.getSubtasks(this);
     	}
     }
@@ -550,17 +547,15 @@ function TasksViewModel() {
     }
     
     self.updateTask = function(task){
-//    	self.ajax(self.tasksURI+"/taskUpdate",'POST',task).done(function(){
-//    	});
+    	self.ajax(self.tasksURI+"/taskUpdate",'POST',task);
     }
     
     self.editTask = function(){
     	var taskElem = this;
     	var oldTaskDescription = taskElem.description; 
-    	self.selectedTaskDescription(taskElem.description);
     	 BootstrapDialog.show({
     		 title: 'Edit Task',
-             message: '<form class="form-horizontal" role="form"  ><input type="text" class="form-control"  required autofocus value="'+taskElem.description+'" placeholder="Edit Task" /></form>',
+             message: '<form class="form-horizontal" role="form"  ><input type="text" class="form-control"  required autofocus value="'+taskElem.description()+'" placeholder="Edit Task" /></form>',
              buttons: [{
                  id: 'btn-ok',   
                  icon: '',       
@@ -571,9 +566,8 @@ function TasksViewModel() {
                 	 var newDescription = dialogRef.getModalBody().find('input').val(); 
                 	 if(newDescription.length==0)
                 		 return;
-                	 self.selectedTask().description=newDescription;
-//                	 self.selectedCategoryName(categoryName);
-//                	 self.updateCategory(); 
+                	 taskElem.description( newDescription );
+                	 self.updateTask(taskElem);
                 	 dialogRef.close();
                  }
              }]

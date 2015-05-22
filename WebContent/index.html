@@ -132,7 +132,7 @@
             </div>
                 <form role="form" accept-charset="utf-8" data-bind="submit: addSubtask">
                     <div class="form-group" >
-                    <input type="TEXT" class="form-control"  required data-bind="value:newSubtaskDescription, attr: {placeholder: 'Add an item to ' + $root.selectedTask().description  }, disable: $root.selectedTask() && $root.selectedTask().done()">
+                    <input type="TEXT" class="form-control"  required data-bind="value:newSubtaskDescription, attr: {placeholder: 'Add an item to ' + ( $root.selectedTask() ? $root.selectedTask().description() : '' )  }, disable: $root.selectedTask() && $root.selectedTask().done()">
                     </div>
                 </form>
             <div id="sub-task-container" >
