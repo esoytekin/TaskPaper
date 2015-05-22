@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Taskpaper</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.4/css/bootstrap-dialog.min.css">
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.4/js/bootstrap-dialog.min.js"></script>
+    
+
+    <script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.1.0.js"></script>       
+    <script src="cookie.js" type="text/javascript" charset="utf-8"></script>
+    
+<style>
+.rating {
+  unicode-bidi: bidi-override;
+  direction: rtl;
+  cursor: pointer;
+}
+.rating > span:hover:before,
+.rating > span:hover ~ span:before {
+   content: "\2605";
+   position: absolute;
+   color: #ff0000;
+}
+.TaskNote{
+	cursor: pointer;
+	height: 100px;
+	background: lightyellow;
+	padding: 5px;
+	display: flex;
+}
+.custom-td{
+	padding: 0px;
+	vertical-align: middle;
+	text-align: center;
+}
+</style>
+    
+    </head>
+    <body>
+    <div class = "container">
+    <div class="navbar navbar-default">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">T A S K P A P E R</a> 
+        </div> 
+    </div>
+    <div class="row">
+
+
+
+
+    <div class="col-md-3" style="display:block;">
+        <ul class = "nav nav-pills nav-stacked" data-bind="foreach: categories">
+            <li data-bind="css: {active: name == $root.selectedCategoryName()}"> 
+              <a  href="#" data-bind="text: name, click: $root.gotoCategory"></a>
+            </li>
+        </ul>
+
+        <ul class = "nav nav-pills nav-stacked" data-bind="foreach:controllers" >
+        	<li>
+        	<a href="#" data-bind="text:name,click: event"></a>
+        	</li>
+        </ul>
+    </div>
+
+    <div class="container-fluid" data-bind="css: $root.selectedTask() ? 'col-md-6' : 'col-md-9'"  style="display: block;" id="divTasks">
+            <div id = "dispNone" style = "display:block">
+            <div class="navbar navbar-default" >
+                <div class="navbar-header">
+                <table class="table" style="margin-bottom: 0px">
+                <tr>
+                <td>
+                <a class="navbar-brand" href="#" data-bind="" id="lnkSelectedCategory"> 
+                <small data-bind="text: selectedCategoryName()"></small> 
+                </a> 
+                </td>
+                <td style="vertical-align: middle;">
+                <a href ="#" data-bind="click: editCategory" class = "glyphicon glyphicon-edit"></a>
+                </td>
+                <td style="vertical-align: middle;">
+                <a href ="#" data-bind="click: deleteCategory" class = "glyphicon glyphicon-trash"></a>
+                </td>
+                </tr>
+                </table>
+            </div>
+            </div>
+            <div  class="col-md-12">
+                <form role="form" accept-charset="utf-8" data-bind="submit: addTask">
+                    <div class="form-group" >
+                    <input type="TEXT" class="form-control"  id="txtNewTask" required data-bind="value:newTaskDescription, enterkey: sendTask, attr: {placeholder: 'Add an item to '+selectedCategoryName()} ">
+                    </div>
+                </form>
+            </div>
+            <br />
+            <br/>
+            <div id="task-container" class="col-md-12">
+                <table class="table table-striped table-hover" >
+                    <tbody data-bind="foreach: tasks">
+                    <tr data-bind="css: done() ? 'success' : favorite() ? 'danger' : ''" >
+                        <td ><input type="CHECKBOX" data-bind="checked: done, click: $root.checkDone"/></td>
+                        <td><i style="padding-left: 5px;"></i>&nbsp;&nbsp;&nbsp;<a href="#"  data-bind="text: description, click: $root.taskClick"></a></td>
+                        <td data-bind="text: date"></td>
+                        <td data-bind="text: done() ? completeDate : ''"></td>
+                        <td class='custom-td'><div class="rating" data-bind="click: $root.ratingClick"><span data-bind="text: favorite() ? '&#9733;' : '&#9734;', style: {color: favorite() ? 'red' : 'black'}" ></span></div></td>
+                        <td class='custom-td'><a href="javascript://" data-bind="click: $root.editTask"><i class="glyphicon glyphicon-edit"></i></a></td>
+                        <td class='custom-td'><a href="javascript://" data-bind="click: $root.removeTask" ><i class="glyphicon glyphicon-trash"></i></a></td>
+                    </tr>
+                    </tbody>
+                    <tbody data-bind="foreach: completeTasks">
+                    <tr data-bind="css: done() ? 'success' : favorite() ? 'danger' : ''">
+                        <td ><input type="CHECKBOX" data-bind="checked: done, click: $root.checkDone"/></td>
+                        <td><i style="padding-left: 5px;"></i>&nbsp;&nbsp;&nbsp;<a href="#"  data-bind="text: description, click: $root.taskClick"></a></td>
+                        <td data-bind="text: date"></td>
+                        <td data-bind="text: done() ? completeDate : ''"></td>
+                        <td></td>
+                        <td class='custom-td'><a href="javascript://" data-bind="click: $root.editTask"><i class="glyphicon glyphicon-edit"></i></a></td>
+                        <td class='custom-td'><a href="javascript://" data-bind="click: $root.removeTask"><i class="glyphicon glyphicon-trash"></i></a></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table class="table table-striped table-hover">
+                </table>
+            </div>
+    </div>
+    </div>
+    <div class="container-fluid col-md-3"  data-bind="fadeVisible: $root.selectedTask()" >
+            <div class="alert " role="alert" data-bind="css: $root.selectedTask() &&  ($root.selectedTask().done() ? 'alert-success' : $root.selectedTask().favorite() ? 'alert-danger' : 'alert-info')" >
+                <span data-bind="text: $root.selectedTask().description"></span>
+            </div>
+                <form role="form" accept-charset="utf-8" data-bind="submit: addSubtask">
+                    <div class="form-group" >
+                    <input type="TEXT" class="form-control"  required data-bind="value:newSubtaskDescription, attr: {placeholder: 'Add an item to ' + $root.selectedTask().description  }, disable: $root.selectedTask() && $root.selectedTask().done()">
+                    </div>
+                </form>
+            <div id="sub-task-container" >
+                <table class="table table-striped table-hover" >
+                    <tbody data-bind="foreach: subtasks">
+                    <tr data-bind="css: done() ? 'success' : favorite() ? 'danger' : ''" >
+                        <td ><input type="CHECKBOX" data-bind="checked: done, click: $root.checkSubtaskDone"/></td>
+                        <td data-bind="text: description"></td>
+                        <td><div class="rating" data-bind="click: $root.subtaskRatingClick"><span data-bind="text: favorite() ? '&#9733;' : '&#9734;', style: {color: favorite() ? 'red' : 'black'}" ></span></div></td>
+                        <td ><a href="javascript://" data-bind="click: $root.removeSubTask" ><i class="glyphicon glyphicon-trash"></i></a></td>
+                    </tr>
+                    </tbody>
+                    <tbody data-bind="foreach: completeSubtasks">
+                    <tr data-bind="css: done() ? 'success' : favorite() ? 'danger' : ''">
+                        <td ><input type="CHECKBOX" data-bind="checked: done, click: $root.checkSubtaskDone"/></td>
+                        <td data-bind="text: description"></td>
+                        <td></td>
+                        <td ><a href="javascript://" data-bind="click: $root.removeSubTask"><i class="glyphicon glyphicon-trash"></i></a></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table class="table table-striped table-hover">
+                </table>
+            </div>
+            <div class="TaskNote" data-bind="text: $root.selectedTask() && $root.selectedTask().note() ? $root.selectedTask().note() : 'Click to add note...', click: noteClick"></div>
+    </div>
+
+    </div>
+
+    </div>
+    
+<div data-bind="modal: {
+    visible: true,
+    dialogCss: 'modal-lg',
+    header: { data: { label: 'Some Header Label' } },
+    body: { name: categoryModal, data: selectedCategory },
+}"></div>
+	
+<script type="text/html" id="categoryModal">
+<form class="form-horizontal" id="frmEditCategory" role="form" data-bind="with:selectedCategory,submit:updateCategory" >
+<input type="text" class="form-control"  required autofocus data-bind="value:name" placeholder="Edit Category" />
+</form>
+</script>
+  
+    <script src="task.js" type="text/javascript" charset="utf-8"></script>
+    </body>
+</html>
