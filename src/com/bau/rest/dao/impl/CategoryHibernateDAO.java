@@ -3,7 +3,6 @@ package com.bau.rest.dao.impl;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -56,12 +55,14 @@ public class CategoryHibernateDAO implements CategoryDAO{
 		return (Category) criteria.uniqueResult();
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Category> getList() {
 		Criteria criteria = getCurrentSession().createCriteria(Category.class);
 		return criteria.list();
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Category> getListByUser(User user) {
 		Criteria criteria = getCurrentSession().createCriteria(Category.class);

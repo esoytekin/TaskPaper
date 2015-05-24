@@ -48,12 +48,14 @@ public class TaskHibernateDAO implements TaskDAO {
 		return (Task) getCurrentSession().get(Task.class, id);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Task> getList() {
 		Criteria criteria = getCurrentSession().createCriteria(Task.class);
 		return criteria.list();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Task> getByCategory(Category entity) {
 		Criteria criteria = getCurrentSession().createCriteria(Task.class);

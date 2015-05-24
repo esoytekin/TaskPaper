@@ -52,6 +52,7 @@ public class UserRoleHibernateDAO implements UserRoleDAO {
 		getCurrentSession().delete(entity);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<UserRole> getUserRoles() {
 		Criteria criteria = getCurrentSession().createCriteria(UserRole.class);

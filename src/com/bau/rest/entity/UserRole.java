@@ -17,6 +17,11 @@ import com.bau.rest.pojo.Role;
 @Table(name="C_USER_ROLE")
 public class UserRole implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5879927032247476409L;
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="ID")

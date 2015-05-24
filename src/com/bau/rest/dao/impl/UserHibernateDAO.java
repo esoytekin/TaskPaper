@@ -44,6 +44,7 @@ public class UserHibernateDAO implements UserDAO {
 		return (User) getCurrentSession().get(User.class, id);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<User> getList() {
 		Criteria criteria = getCurrentSession().createCriteria(User.class);

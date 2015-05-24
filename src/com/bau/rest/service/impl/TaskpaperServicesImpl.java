@@ -38,6 +38,7 @@ public class TaskpaperServicesImpl implements TaskpaperServices{
 	@Autowired
 	private UserRoleDAO userRoleDAO;
 	
+	@SuppressWarnings("unused")
 	private String getUserRoles(){
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String roles = auth.getAuthorities().toString();

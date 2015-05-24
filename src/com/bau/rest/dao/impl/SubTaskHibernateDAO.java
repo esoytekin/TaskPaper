@@ -50,6 +50,7 @@ public class SubTaskHibernateDAO implements SubTaskDAO {
 		return (SubTask) getCurrentSession().get(SubTask.class, id);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<SubTask> getList() {
 		Criteria criteria = getCurrentSession().createCriteria(SubTask.class);
@@ -58,6 +59,7 @@ public class SubTaskHibernateDAO implements SubTaskDAO {
 		return criteria.list();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<SubTask> getByTask(Task entity) {
 		Criteria criteria = getCurrentSession().createCriteria(SubTask.class);
