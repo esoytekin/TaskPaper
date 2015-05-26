@@ -157,7 +157,13 @@
                 <table class="table table-striped table-hover">
                 </table>
             </div>
+            <div>Notes: <i class="glyphicon glyphicon-pencil"></i></div>
+            <hr />
             <div class="TaskNote" data-bind="text: $root.selectedTask() && $root.selectedTask().note() ? $root.selectedTask().note() : 'Click to add note...', click: noteClick"></div>
+            <div>
+                    <div class="label label-success" >Started: <span data-bind="text: $root.selectedTask().date"></span></div>
+                    <div  class="label label-primary"  data-bind="style: {display: ( $root.selectedTask() && $root.selectedTask().done() ) ? '' : 'none'}">Completed: <span data-bind="text: $root.selectedTask().completeDate"></span></div>
+            </div>
     </div>
 
     </div>
