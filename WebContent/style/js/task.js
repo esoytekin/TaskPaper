@@ -193,33 +193,6 @@ function TasksViewModel() {
     	});
     	
     }
-    //Task functions
-    self.getTasks2 = function(categoryId){
-    	self.ajax(self.tasksURI+"/getByCategory/"+categoryId, 'GET').done(function(data) {
-    		
-    		self.tasks([]);
-    		self.completeTasks([]);
-
-    		for(var i = 0; i<data.length; i++){
-    			var taskElem = new todoTask(data[i].description,new Date(data[i].date));
-    			taskElem.id = data[i].id;
-    			taskElem.done(data[i].done);
-    			taskElem.favorite(data[i].favorite);
-    			taskElem.rawCompleteDate(new Date(data[i].completeDate));
-    			taskElem.note(data[i].note);
-    			if(taskElem.done()){
-    				self.completeTasks.push(taskElem);
-    			}else{
-    				self.tasks.push(taskElem);
-    			}
-
-    		}
-    	});
-    	
-    }
-    
-    
-    
     //Category functions
 
     self.gotoCategory = function(category){
