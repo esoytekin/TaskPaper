@@ -1,0 +1,24 @@
+@CHARSET "ISO-8859-1";
+.rating {
+  unicode-bidi: bidi-override;
+  direction: rtl;
+  cursor: pointer;
+}
+.rating > span:hover:before,
+.rating > span:hover ~ span:before {
+   content: "\2605";
+   position: absolute;
+   color: #ff0000;
+}
+.TaskNote{
+	cursor: pointer;
+	height: 100px;
+	background: lightyellow;
+	padding: 5px;
+	display: flex;
+}
+.custom-td{
+	padding: 0px;
+	vertical-align: middle;
+	text-align: center;
+}
