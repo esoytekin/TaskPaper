@@ -160,6 +160,7 @@
             <div>Notes: <i class="glyphicon glyphicon-pencil"></i></div>
             <hr />
             <div class="TaskNote" data-bind="text: $root.selectedTask() && $root.selectedTask().note() ? $root.selectedTask().note() : 'Click to add note...', click: noteClick"></div>
+            <hr />
             <div>
                     <div class="label label-success" >Started: <span data-bind="text: $root.selectedTask().date"></span></div>
                     <div  class="label label-primary"  data-bind="style: {display: ( $root.selectedTask() && $root.selectedTask().done() ) ? '' : 'none'}">Completed: <span data-bind="text: $root.selectedTask().completeDate"></span></div>
@@ -170,19 +171,6 @@
 
     </div>
     
-<div data-bind="modal: {
-    visible: true,
-    dialogCss: 'modal-lg',
-    header: { data: { label: 'Some Header Label' } },
-    body: { name: categoryModal, data: selectedCategory },
-}"></div>
-	
-<script type="text/html" id="categoryModal">
-<form class="form-horizontal" id="frmEditCategory" role="form" data-bind="with:selectedCategory,submit:updateCategory" >
-<input type="text" class="form-control"  required autofocus data-bind="value:name" placeholder="Edit Category" />
-</form>
-</script>
-  
     <script src="task.js" type="text/javascript" charset="utf-8"></script>
     </body>
 </html>
