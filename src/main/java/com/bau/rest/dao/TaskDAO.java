@@ -12,4 +12,5 @@ public interface TaskDAO {
 	Task getById(Long id);
 	List<Task> getList();
 	List<Task> getByCategory(Category entity);
+	long getTaskCountByCategory(Category entity);
 }

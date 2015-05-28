@@ -74,6 +74,10 @@ public class TaskpaperServicesImpl implements TaskpaperServices{
 		if(categories.size() == 0){
 			categories.add(createAndGetFirstCategory());
 		}
+		for (Category category : categories) {
+			long taskCount = taskDAO.getTaskCountByCategory(category);
+			category.setTaskCount(taskCount);
+		}
 		return categories;
 	}
 	

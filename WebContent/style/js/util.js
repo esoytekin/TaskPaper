@@ -57,13 +57,27 @@ function isUrl (text) {
 
 }
 
+
 function parseUrl(text){
-	var regex= /((http|https|ftp|ftps)\:\/\/)?([a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3})(\/.*)?/i;
-
-	if(!regex.test(text))
-		return text;
-
-	var regPattern = regex.exec(text);
+	/**
+	 * <br /> gore split et
+	 * onlari da kendi icinde bosluga gore split et
+	 * duzenle
+	 * join et
+	 * 
+	 * 
+	 */
 	
-	return '<a href="'+regPattern[0]+'" target="_blank" style="display:table-cell">'+regPattern[3]+'</a>';
+	var regex= /((http|https|ftp|ftps)\:\/\/)?([a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3})(\/.*)?/ig;
+	var elements = text.split("<br />");
+	for(var i in elements){
+		var subelements = (elements[i]).split(" ");
+		for(var k in subelements){
+			var text = subelements[k];
+			subelements[k] = text.replace(regex,'<a href="'+text+'" target="_blank" >$3</a>');
+		}
+		elements[i] = subelements.join(" ");
+	}
+	return elements.join("<br />");
+	
 }

@@ -6,6 +6,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -63,6 +64,15 @@ public class TaskHibernateDAO implements TaskDAO {
 		criteria.addOrder(Order.desc("favorite"));
 		criteria.addOrder(Order.desc("date"));
 		return criteria.list();
+	}
+	
+	@Override
+	public long getTaskCountByCategory(Category entity) {
+		Criteria criteria = getCurrentSession().createCriteria(Task.class);
+		criteria.add(Restrictions.eq("category", entity));
+		criteria.add(Restrictions.eq("done", Boolean.FALSE));
+		criteria.setProjection(Projections.rowCount());
+		return (long) criteria.uniqueResult();
 	}
 
 }

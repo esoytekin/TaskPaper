@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
 
@@ -38,6 +39,10 @@ public class Category {
 	@Column(name="ENABLED")
 	@Type(type="yes_no")
 	private Boolean enabled;
+	
+	
+	@Transient
+	private Long taskCount;
 
 	public Long getId() {
 		return id;
@@ -77,6 +82,14 @@ public class Category {
 
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
+	}
+	
+	public Long getTaskCount() {
+		return taskCount;
+	}
+	
+	public void setTaskCount(Long taskCount) {
+		this.taskCount = taskCount;
 	}
 	
 }

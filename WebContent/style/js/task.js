@@ -62,19 +62,17 @@ var todoTask = function(description,rawDate){
 	self.parsedNote = ko.computed(function(){
 		
 		var note = self.note();
-		console.log(note);
-		note = note.replace("\n","<br />");
-
-		console.log(note);
-		return converter.makeHtml(note);
-/*
-		if(isUrl(self.note())){
-			return parseUrl(self.note());
+		if(!note)
+			return;
+		note = note.replace(/\n/g,"<br />");
+//
+//		return converter.makeHtml(note);
+		if(isUrl(note)){
+			return parseUrl(note);
 		}else{
-			return self.note();
+			return note;
 
 		}
-		*/
 	});
 }
 
@@ -111,6 +109,7 @@ var todoCategory = function(categoryName,rawDate){
 	var self = this;
 	self.name = categoryName;
 	self.rawDate = rawDate;
+	self.taskCount=0;
     self.date = ko.computed(function(){
         var day = rawDate.getDate();
         var month = rawDate.getMonth()+1;
@@ -241,7 +240,6 @@ function TasksViewModel() {
     	});
     }
     
-
 
     self.addTask = function(){
         var taskElem = new todoTask(self.newTaskDescription(),new Date());
@@ -493,6 +491,8 @@ function TasksViewModel() {
     	var task = self.selectedTask();
     	var tasknote = task.note() ? task.note() : ''; 
     	tasknote = tasknote.replace(/<br\s*\/?>/mg,"&#13;&#10;");
+    	tasknote = tasknote.replace(/(\r\n|\n|\r)/gm,"&#13;&#10;");
+    	console.log(tasknote);
     	 BootstrapDialog.show({
     		 title: 'Add Note',
              message: '<textarea class="form-control"  placeholder="Add Note..." >'+tasknote+'</textarea>',
