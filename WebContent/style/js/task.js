@@ -1,3 +1,11 @@
+//$("#navCategory").hover(
+//  function(){
+//	  $(".btnCategory").fadeIn();
+//  },
+//  function(){
+//	  $(".btnCategory").fadeOut();
+//  }
+//);
 ko.bindingHandlers.jqButton = {
     init: function(element, valueAccessor){
         var currentVal = valueAccessor();
@@ -50,6 +58,24 @@ var todoTask = function(description,rawDate){
         var dateFull = month + '/' + day + '/' + year;
         return dateFull;
     });
+    var converter = new Markdown.Converter();
+	self.parsedNote = ko.computed(function(){
+		
+		var note = self.note();
+		console.log(note);
+		note = note.replace("\n","<br />");
+
+		console.log(note);
+		return converter.makeHtml(note);
+/*
+		if(isUrl(self.note())){
+			return parseUrl(self.note());
+		}else{
+			return self.note();
+
+		}
+		*/
+	});
 }
 
 var todoTask2 = function(data){
@@ -404,6 +430,7 @@ function TasksViewModel() {
                  label: 'OK',
                  cssClass: 'btn-primary', 
                  autospin: false,
+                 hotkey:13,//enter
                  action: function(dialogRef){    
                 	 var categoryName = dialogRef.getModalBody().find('input').val();
                 	 if(categoryName.length==0)
@@ -412,7 +439,12 @@ function TasksViewModel() {
                 	 self.addCategory();
                      dialogRef.close();
                  }
-             }]
+             }],
+             onshown: function(dialogRef){
+            	 var element = dialogRef.getModalBody().find('input');
+            	 element.focus();
+            	 element[0].setSelectionRange(0,element.val().length);
+             }
          });
     	self.selectedController(this.name);
     }
@@ -460,10 +492,10 @@ function TasksViewModel() {
     self.noteClick = function(){
     	var task = self.selectedTask();
     	var tasknote = task.note() ? task.note() : ''; 
-    	
+    	tasknote = tasknote.replace(/<br\s*\/?>/mg,"&#13;&#10;");
     	 BootstrapDialog.show({
     		 title: 'Add Note',
-             message: '<textarea class="form-control"  required autofocus data-bind="value:self.selectedNote()" placeholder="Add Note..." >'+tasknote+'</textarea>',
+             message: '<textarea class="form-control"  placeholder="Add Note..." >'+tasknote+'</textarea>',
              buttons: [{
                  id: 'btn-ok',   
                  icon: 'glyphicon glyphicon-check',       
@@ -472,11 +504,16 @@ function TasksViewModel() {
                  autospin: false,
                  action: function(dialogRef){    
                 	 var note = dialogRef.getModalBody().find('textarea').val();
-                		 self.selectedTask().note(note);
-                		 self.updateTaskNote(self.selectedTask());
-                		 dialogRef.close();
+                	 self.selectedTask().note(note); 
+                	 self.updateTaskNote(self.selectedTask()); 
+                	 dialogRef.close();
                  }
-             }]
+             }],
+             onshown: function(dialogRef){
+            	 var element = dialogRef.getModalBody().find('textarea');
+            	 element.focus();
+            	 element[0].setSelectionRange(0,element.val().length);
+             }
          });
     }
     
@@ -496,27 +533,38 @@ function TasksViewModel() {
     
     
     self.editCategory = function(){
+    	if(self.selectedCategoryName()=='Inbox') 
+    	{ 
+    		alert("You can not edit Inbox!");
+    		return;
+    	}
     	var oldCategoryName= self.selectedCategoryName();
-    	 BootstrapDialog.show({
-    		 title: 'Edit Category',
-             message: '<form class="form-horizontal" role="form" data-bind="with:self.selectedCategory(),submit:updateCategory" ><input type="text" class="form-control"  required autofocus value="'+self.selectedCategoryName()+'" placeholder="Edit Category" /></form>',
+    	
+             BootstrapDialog.show({
+                     title: 'Edit Category',
+             message: '<input type="text" class="form-control"   required autofocus value="'+self.selectedCategoryName()+'" placeholder="Edit Category" />',
              buttons: [{
                  id: 'btn-ok',   
                  icon: '',       
                  label: 'OK',
                  cssClass: 'btn-primary', 
                  autospin: true,
+                 hotkey:13,//enter
                  action: function(dialogRef){    
-                	 var categoryName = dialogRef.getModalBody().find('input').val(); 
-                	 if(categoryName.length==0)
-                		 return;
-                	 self.selectedCategoryName(categoryName);
-                	 self.updateCategory(); 
-                	 dialogRef.close();
+                         var categoryName = dialogRef.getModalBody().find('input').val(); 
+                         if(categoryName.length==0)
+                                 return;
+                         self.selectedCategoryName(categoryName);
+                         self.updateCategory(); 
+                         dialogRef.close();
                  }
-             }]
+             }],
+             onshown: function(dialogRef){
+                     var element = dialogRef.getModalBody().find('input');
+                     element.focus();
+                     element[0].setSelectionRange(0,element.val().length);
+             }
          });
-    	
     }
     
     self.updateTask = function(task){
@@ -526,15 +574,16 @@ function TasksViewModel() {
     self.editTask = function(){
     	var taskElem = this;
     	var oldTaskDescription = taskElem.description; 
-    	 BootstrapDialog.show({
+    	BootstrapDialog.show({
     		 title: 'Edit Task',
-             message: '<form class="form-horizontal" role="form"  ><input type="text" class="form-control"  required autofocus value="'+taskElem.description()+'" placeholder="Edit Task" /></form>',
+             message: '<input type="text" class="form-control"  required autofocus value="'+taskElem.description()+'" placeholder="Edit Task" />',
              buttons: [{
                  id: 'btn-ok',   
                  icon: '',       
                  label: 'OK',
                  cssClass: 'btn-primary', 
                  autospin: true,
+                 hotkey:13,//enter
                  action: function(dialogRef){    
                 	 var newDescription = dialogRef.getModalBody().find('input').val(); 
                 	 if(newDescription.length==0)
@@ -543,8 +592,13 @@ function TasksViewModel() {
                 	 self.updateTask(taskElem);
                 	 dialogRef.close();
                  }
-             }]
-         });
+             }],
+             onshown: function(dialogRef){
+            	 var element = dialogRef.getModalBody().find('input');
+            	 element.focus();
+            	 element[0].setSelectionRange(0,element.val().length);
+             }
+        });
     }
     
     self.deleteCategory = function(){
@@ -567,6 +621,11 @@ function TasksViewModel() {
     
     self.removeCategory = function(category){
     	self.ajax(self.tasksURI+"/categoryDelete",'POST',category);
+    }
+    
+    self.noteFullScreen = function(){
+
+    	alert(self.selectedTask().parsedNote());
     }
     
     

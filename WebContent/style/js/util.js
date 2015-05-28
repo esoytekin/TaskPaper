@@ -20,6 +20,7 @@ var alert = function(alert){
 	dialogInstance3.getModalHeader().hide();
 	dialogInstance3.open();
 }
+
 function setCookie(c_name,value,exdays){//{{{
     var exdate=new Date();
     exdate.setDate(exdate.getDate() + exdays);
@@ -44,3 +45,25 @@ for (i=0;i<ARRcookies.length;i++)
 function delCookie(name){//{{{
     document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }//}}}
+
+function isUrl (text) {
+    var urlRegex =/[(http|https|ftp|ftps)\:\/\/]?([a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3})(\/\S*)?/;
+
+    var n = text.search(urlRegex);
+
+    if(n!=-1)
+        return true;
+    return false;
+
+}
+
+function parseUrl(text){
+	var regex= /((http|https|ftp|ftps)\:\/\/)?([a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3})(\/.*)?/i;
+
+	if(!regex.test(text))
+		return text;
+
+	var regPattern = regex.exec(text);
+	
+	return '<a href="'+regPattern[0]+'" target="_blank" style="display:table-cell">'+regPattern[3]+'</a>';
+}

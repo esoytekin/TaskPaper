@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.4/css/bootstrap-dialog.min.css">
+    <link rel="stylesheet" href="style/css/bootstrap-markdown-min.css">
     <link rel="stylesheet" href="style/css/master.css">
     <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
@@ -12,6 +13,7 @@
     
 
     <script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.1.0.js"></script>       
+    <script src="style/js/Markdown.Converter.js" type="text/javascript" charset="utf-8"></script>
     <script src="style/js/util.js" type="text/javascript" charset="utf-8"></script>
     
     
@@ -45,7 +47,7 @@
     <div class="container-fluid" data-bind="css: $root.selectedTask() ? 'col-md-6' : 'col-md-9'"  style="display: block;" id="divTasks">
             <div id = "dispNone" style = "display:block">
             <div class="navbar navbar-default" >
-                <div class="navbar-header">
+                <div class="navbar-header" id="navCategory">
                 <table class="table" style="margin-bottom: 0px">
                 <tr>
                 <td>
@@ -54,10 +56,10 @@
                 </a> 
                 </td>
                 <td style="vertical-align: middle;">
-                <a href ="#" data-bind="click: editCategory" class = "glyphicon glyphicon-edit"></a>
+                <a id="btnEditCategory"  href ="#" data-bind="visible:$root.selectedCategoryName() != 'Inbox',click: editCategory" class = "glyphicon glyphicon-edit btnCategory"></a>
                 </td>
                 <td style="vertical-align: middle;">
-                <a href ="#" data-bind="click: deleteCategory" class = "glyphicon glyphicon-trash"></a>
+                <a id="btnDeleteCategory"   href ="#" data-bind="visible:$root.selectedCategoryName() != 'Inbox',click: deleteCategory" class = "glyphicon glyphicon-trash btnCategory"></a>
                 </td>
                 </tr>
                 </table>
@@ -133,9 +135,9 @@
                 <table class="table table-striped table-hover">
                 </table>
             </div>
-            <div>Notes: <i class="glyphicon glyphicon-pencil"></i></div>
+            <div>Notes&nbsp;&nbsp;&nbsp;<i class="glyphicon glyphicon-pencil"></i><a href="javascript://" class="glyphicon glyphicon-fullscreen" data-bind="visible:$root.selectedTask() && $root.selectedTask().note(),click: $root.noteFullScreen" style="float:right"></a> </div>
             <hr />
-            <div class="TaskNote" data-bind="text: $root.selectedTask() && $root.selectedTask().note() ? $root.selectedTask().note() : 'Click to add note...', click: noteClick"></div>
+            <div class="TaskNote" data-bind="html: $root.selectedTask() && $root.selectedTask().note() ? $root.selectedTask().parsedNote(): 'Click to add note...', click: noteClick" ></div>
             <hr />
             <div>
                     <div class="label label-success" >Started: <span data-bind="text: $root.selectedTask().date"></span></div>

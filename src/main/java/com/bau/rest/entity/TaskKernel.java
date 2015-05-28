@@ -31,7 +31,7 @@ public class TaskKernel {
 	@Column(name="DESCRIPTION")
 	private String description;
 	
-	@Column(name="NOTE")
+	@Column(name="NOTE", columnDefinition="TEXT")
 	private String note;
 	
 	@Column(name="DONE")

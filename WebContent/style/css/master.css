@@ -16,6 +16,7 @@
 	background: lightyellow;
 	padding: 5px;
 	display: flex;
+	overflow:auto;
 }
 .custom-td{
 	padding: 0px;

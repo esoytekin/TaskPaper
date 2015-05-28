@@ -164,6 +164,7 @@ public class TodoRest {
 	@ResponseBody
 	public void updateTaskNote(@RequestParam Long id, @RequestParam String note){
 		
+		note = note.replaceAll("\n", "<br />");
 		Task t = taskPaperServices.getTaskById(id);
 		t.setNote(note);
 		taskPaperServices.updateTask(t);
