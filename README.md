@@ -16,3 +16,5 @@ git clone https://github.com/esoytekin/TaskPaper.git
 * Make Shared Lists
    - [] Add Contrubutors 
    - [] Define Rules
+   - [] add reminders
+   - [] add repetitive tasks
