@@ -1,6 +1,6 @@
 # TaskPaper
 
-A quick *todo list* developed by using [knockoutjs](http://knockoutjs.com), bootstrap, spring, hibernate and maven
+A quick *todo list* developed by using [knockoutjs](http://knockoutjs.com), [bootstrap](http://getbootstrap.com/css/), [spring](http://spring.io/), [hibernate](http://hibernate.org/) and [maven](https://maven.apache.org/)
 
 #Installation
 * clone project into your eclipse workspace using:
@@ -16,3 +16,5 @@ git clone https://github.com/esoytekin/TaskPaper.git
 * Make Shared Lists
    - [] Add Contrubutors 
    - [] Define Rules
+   - [] add reminders
+   - [] add repetitive tasks
