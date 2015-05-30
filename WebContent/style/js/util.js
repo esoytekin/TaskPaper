@@ -47,7 +47,7 @@ function delCookie(name){//{{{
 }//}}}
 
 function isUrl (text) {
-    var urlRegex =/[(http|https|ftp|ftps)\:\/\/]?([a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3})(\/\S*)?/;
+    var urlRegex =/[(http|https|ftp|ftps)\:\/\/]?([a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3})(\/\S*)?/ig;
 
     var n = text.search(urlRegex);
 

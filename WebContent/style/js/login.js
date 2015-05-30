@@ -75,7 +75,16 @@ function LoginViewModel() {
     }
 	self.loginElement = new LoginElement();	
 	self.signElement = new SignElement();
-    self.loginURI = 'http://'+getBaseUrl()+':8080/TaskPaper/rest/login';
+	var baseUrl = getBaseUrl();
+	
+    if(baseUrl.search("47.168.150.224")!=-1){
+    	baseUrl = 'http://'+baseUrl+':9080/TaskPaper/rest/login';
+    	
+    }else{
+    	
+    	baseUrl = 'http://'+baseUrl+':8080/TaskPaper/rest/login';
+    }
+    self.loginURI = baseUrl;
 	
 	self.loginEvent = function(){
 		if(!loginElement.username() || !loginElement.password()){

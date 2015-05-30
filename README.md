@@ -18,3 +18,4 @@ git clone https://github.com/esoytekin/TaskPaper.git
    - [] Define Rules
    - [] add reminders
    - [] add repetitive tasks
+   - [] add file attachments

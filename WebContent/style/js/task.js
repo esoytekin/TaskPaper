@@ -148,7 +148,15 @@ function TasksViewModel() {
 //    üzerindeki uzak kaynağın okunmasına izin vermiyor. (Sebep: CORS üstbilgisi
 //    'Access-Control-Allow-Origin' eksik.)
 //    var host = mobilecheck() ? "192.168.1.102" : "localhost";
-    self.tasksURI = 'http://'+getBaseUrl()+':8080/TaskPaper/rest/todos';
+    var baseUrl = getBaseUrl();
+    if(baseUrl.search("47.168.150.224")!=-1){
+    	baseUrl = 'http://'+baseUrl+':9080/TaskPaper/rest/todos';
+    	
+    }else{
+    	
+    	baseUrl = 'http://'+baseUrl+':8080/TaskPaper/rest/todos';
+    }
+    self.tasksURI = baseUrl;
     self.username = getCookie('username');
     self.password = getCookie('password');
     self.selectedCategoryName = ko.observable();

@@ -72,7 +72,7 @@ public class TaskHibernateDAO implements TaskDAO {
 		criteria.add(Restrictions.eq("category", entity));
 		criteria.add(Restrictions.eq("done", Boolean.FALSE));
 		criteria.setProjection(Projections.rowCount());
-		return (long) criteria.uniqueResult();
+		return (Long)criteria.uniqueResult();
 	}
 
 }
