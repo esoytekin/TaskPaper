@@ -13,4 +13,5 @@ public interface SubTaskDAO {
 	SubTask getById(Long id);
 	List<SubTask> getList();
 	List<SubTask> getByTask(Task entity);
+	Long getSubTaskCountByTask(Task entity);
 }

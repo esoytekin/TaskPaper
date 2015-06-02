@@ -104,12 +104,18 @@ public class TaskpaperServicesImpl implements TaskpaperServices{
 	
 	@Override
 	public Task getTaskById(Long id) {
-		return taskDAO.getById(id);
+		Task t = taskDAO.getById(id);
+		t.setSubTaskCount(subtaskDAO.getSubTaskCountByTask(t));
+		return t;
 	}
 	
 	@Override
 	public List<Task> getTasksByCategory(Category c) {
-		return taskDAO.getByCategory(c);
+		List<Task> tasks = taskDAO.getByCategory(c);
+		for (Task task : tasks) {
+			task.setSubTaskCount(subtaskDAO.getSubTaskCountByTask(task));
+		}
+		return tasks;
 	}
 	
 	@Override
