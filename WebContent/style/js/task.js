@@ -247,6 +247,7 @@ function TasksViewModel() {
     			cat = new todoCategory(data[i].name, new Date(data[i].date));
     			cat.taskCount(data[i].taskCount);
     			cat.enabled= data[i].enabled;
+    			cat.id=data[i].id;
     			self.categories.push(cat);
     		}
     		if (!self.selectedCategoryName()){
