@@ -34,3 +34,12 @@
     white-space: nowrap;
     width: 200px;
 }
+
+#body {
+/* 	background-color: #f7fbfe; */
+    background-color: #ffffff;
+	border-radius: 5px;
+	margin: 0 auto;
+	padding: 10px 0px;
+	border: solid 1px #f5f5f5;
+}
