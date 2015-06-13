@@ -134,8 +134,8 @@
             data-bind="visible:$root.selectedTask() && $root.selectedTask().note(),click: $root.noteFullScreen" 
             style="float:right"></a> 
             </div>
-            <div class="TaskNote" >
-            <p data-bind="click: noteClick , html: $root.selectedTask() && $root.selectedTask().note() ? $root.selectedTask().parsedNote(): 'Click to add note...'"></p>
+            <div class="TaskNote" data-bind="click: noteClick" >
+            <p data-bind="html: $root.selectedTask() && $root.selectedTask().note() ? $root.selectedTask().parsedNote(): 'Click to add note...'"></p>
             </div>
             <hr />
             <div>
