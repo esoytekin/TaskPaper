@@ -40,6 +40,7 @@ var todoTask = function(description,rawDate){
     self.favorite = ko.observable(false);
     self.note = ko.observable('');
     self.rawCompleteDate = ko.observable();
+    self.subTaskCount = ko.observable();
     self.date = ko.computed(function(){
         var day = rawDate.getDate();
         var month = rawDate.getMonth()+1;
@@ -109,7 +110,8 @@ var todoCategory = function(categoryName,rawDate){
 	var self = this;
 	self.name = categoryName;
 	self.rawDate = rawDate;
-	self.taskCount=0;
+	self.taskCount=ko.observable();
+	self.enabled = true;
     self.date = ko.computed(function(){
         var day = rawDate.getDate();
         var month = rawDate.getMonth()+1;
@@ -170,7 +172,12 @@ function TasksViewModel() {
 //        	self.error(self.error()+"__"+props); 
 //         }
          if(jqXHR.status == 401){
-        	 location.href = "login.html";
+
+//        	 console.log(self.username);
+        	 if(!self.username) 
+        		 location.href = "login.html";
+        	 else 
+        		 location.href = "login.html#authFailed";
          }
          if(jqXHR.status == 0){
         	 //handle CORS
@@ -216,6 +223,7 @@ function TasksViewModel() {
     			taskElem.favorite(data[i].favorite);
     			taskElem.rawCompleteDate(new Date(data[i].completeDate));
     			taskElem.note(data[i].note);
+    			taskElem.subTaskCount(data[i].subTaskCount);
     			if(taskElem.done()){
     				self.completeTasks.push(taskElem);
     			}else{
@@ -239,11 +247,16 @@ function TasksViewModel() {
     self.getCategories = function(){
     	self.ajax(self.tasksURI+"/getCategories",'GET').done(function(data){
     		self.categories([]);
+    		var cat;
     		for(var i = 0; i<data.length; i++){
-    			self.categories.push(data[i]);
+    			cat = new todoCategory(data[i].name, new Date(data[i].date));
+    			cat.taskCount(data[i].taskCount);
+    			cat.enabled= data[i].enabled;
+    			cat.id=data[i].id;
+    			self.categories.push(cat);
     		}
     		if (!self.selectedCategoryName()){
-    			self.gotoCategory(data[0]);
+    			self.gotoCategory(self.categories()[0]);
     		}
     	});
     }
@@ -259,6 +272,7 @@ function TasksViewModel() {
     		if(data.id){
                 taskElem.id=data.id;
                 self.tasks.unshift(taskElem);
+                self.selectedCategory().taskCount(self.selectedCategory().taskCount()+1);
     		}
     	});
     }
@@ -271,6 +285,7 @@ function TasksViewModel() {
     		if(data.id){
     			subTaskElem.id = data.id;
     			self.subtasks.unshift(subTaskElem);
+    			self.selectedTask().subTaskCount(self.selectedTask().subTaskCount()+1);
     		}
     	});
     	
@@ -302,8 +317,8 @@ function TasksViewModel() {
     					self.completeTasks.remove(taskElem);
     				}else{
     					self.tasks.remove(taskElem); 
-    				}
-    					
+    					self.selectedCategory().taskCount(self.selectedCategory().taskCount()-1);
+    				} 
     			});
     		}
     		
@@ -323,13 +338,16 @@ function TasksViewModel() {
     	taskElem.rawCompleteDate(taskElem.done() ? new Date() : null);
     	if(taskElem.done()){
     		self.tasks.remove(taskElem);
-    		customPush(taskElem, self.completeTasks);
+    		customPush(taskElem, self.completeTasks); 
+    		self.selectedCategory().taskCount(self.selectedCategory().taskCount()-1);
     	}else{
 
     		self.completeTasks.remove(taskElem);
     		customPush(taskElem, self.tasks);
+    		self.selectedCategory().taskCount(self.selectedCategory().taskCount()+1);
     		
-    	}
+    	} 
+    	console.log( self.selectedCategory().taskCount() );
     	self.ajax(self.tasksURI+"/complete", 'POST',taskElem).done(function(data) {
     	});
     	
@@ -361,9 +379,11 @@ function TasksViewModel() {
     	if(subtaskElem.done()){
     		self.subtasks.remove(subtaskElem);
     		customPush(subtaskElem,self.completeSubtasks);
+    		self.selectedTask().subTaskCount(self.selectedTask().subTaskCount()-1);
     	}else{
     		self.completeSubtasks.remove(subtaskElem);
     		customPush(subtaskElem, self.subtasks);
+    		self.selectedTask().subTaskCount(self.selectedTask().subTaskCount()+1);
     	}
     	
     	self.ajax(self.tasksURI+"/subtask/complete","POST",subtaskElem);
@@ -402,7 +422,8 @@ function TasksViewModel() {
     					self.completeSubtasks.remove(taskElem); 
     				}else{
     					self.subtasks.remove(taskElem); 
-    				}
+    					self.selectedTask().subTaskCount(self.selectedTask().subTaskCount()-1);
+    				} 
 
     					
     			});
@@ -486,12 +507,15 @@ function TasksViewModel() {
     	
     }
     
-    self.taskClick = function(){ 
+    self.taskClick = function(item,event){ 
+    	$(".task").removeClass("activeTask");
+    	
     	if(this.description === self.selectedTask().description){
     		self.selectedTask(''); 
     	}else{ 
     		self.selectedTask(this); 
-            self.getSubtasks(this);
+            self.getSubtasks(this); 
+            $( event.target ).closest("tr").addClass("activeTask");
     	}
     }
     

@@ -50,6 +50,14 @@ function LoginViewModel() {
         	 location.href = "login.html";
          }
     }
+	self.checkFailAuth = function(){ 
+		if(location.hash=='#authFailed'){ 
+			alert("Wrong username or password..","Authentication Failed",BootstrapDialog.TYPE_DANGER);
+		}
+		location.hash='';
+    	delCookie("username");
+    	delCookie("password");
+	}
     self.ajax = function(uri, method, data) {
         progressBar.open();
         var request = {
@@ -76,6 +84,7 @@ function LoginViewModel() {
 	self.loginElement = new LoginElement();	
 	self.signElement = new SignElement();
 	var baseUrl = getBaseUrl();
+	self.checkFailAuth();
 	
     if(baseUrl.search("47.168.150.224")!=-1){
     	baseUrl = 'http://'+baseUrl+':9080/TaskPaper/rest/login';
@@ -85,6 +94,7 @@ function LoginViewModel() {
     	baseUrl = 'http://'+baseUrl+':8080/TaskPaper/rest/login';
     }
     self.loginURI = baseUrl;
+    
 	
 	self.loginEvent = function(){
 		if(!loginElement.username() || !loginElement.password()){
@@ -110,6 +120,7 @@ function LoginViewModel() {
 			}
 		});
 	}
+	
 
 }
 ko.applyBindings(new LoginViewModel());

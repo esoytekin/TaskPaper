@@ -11,13 +11,19 @@ window.getBaseUrl = function(){
 	return /\/\/(.+):/i.exec(document.URL)[1]
 	
 }
-var alert = function(alert){
+var alert = function(alert,title,type){
 	var dialogInstance3 = new BootstrapDialog()
-    .setTitle('')
-    .setMessage(alert)
-    .setType(BootstrapDialog.TYPE_DANGER);
+    .setMessage(alert);
 	dialogInstance3.realize();
-	dialogInstance3.getModalHeader().hide();
+	if(title){
+		dialogInstance3.setTitle(title)
+	}
+	
+	if(!type){
+                dialogInstance3.getModalHeader().hide();
+	}else{
+		dialogInstance3.setType(BootstrapDialog.TYPE_DANGER);
+	}
 	dialogInstance3.open();
 }
 
@@ -80,4 +86,12 @@ function parseUrl(text){
 	}
 	return elements.join("<br />");
 	
+}
+
+
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
