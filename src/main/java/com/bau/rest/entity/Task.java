@@ -9,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
 @DiscriminatorValue("task")
@@ -22,6 +23,9 @@ public class Task extends TaskKernel{
 	@Column(name="CHECK_DATE")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date completeDate;
+	
+	@Transient
+	private Long subTaskCount;
 
 
 	public Category getCategory() {
@@ -43,6 +47,12 @@ public class Task extends TaskKernel{
 		this.completeDate = completeDate;
 	}
 
+	public Long getSubTaskCount() {
+		return subTaskCount;
+	}
 	
+	public void setSubTaskCount(Long subTaskCount) {
+		this.subTaskCount = subTaskCount;
+	}
 	
 }

@@ -23,3 +23,14 @@
 	vertical-align: middle;
 	text-align: center;
 }
+
+.activeTask {
+	border: solid 2px #c4c4c4;
+}
+.taskDesc{
+	display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 200px;
+}

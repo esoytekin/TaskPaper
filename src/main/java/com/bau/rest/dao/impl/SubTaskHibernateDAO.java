@@ -6,6 +6,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -67,6 +68,15 @@ public class SubTaskHibernateDAO implements SubTaskDAO {
 		criteria.addOrder(Order.desc("favorite"));
 		criteria.addOrder(Order.desc("date"));
 		return criteria.list();
+	}
+	
+	@Override
+	public Long getSubTaskCountByTask(Task entity) {
+		Criteria criteria = getCurrentSession().createCriteria(SubTask.class);
+		criteria.add(Restrictions.eq("task", entity));
+		criteria.add(Restrictions.eq("done", Boolean.FALSE));
+		criteria.setProjection(Projections.rowCount());
+		return (Long)criteria.uniqueResult();
 	}
 
 }

@@ -3,6 +3,7 @@
     <head>
     <title>Taskpaper</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.4/css/bootstrap-dialog.min.css">
     <link rel="stylesheet" href="style/css/master.css">
@@ -32,7 +33,7 @@
     <div class="col-md-3" style="display:block;">
         <ul class = "nav nav-pills nav-stacked" data-bind="foreach: categories">
             <li data-bind="css: {active: name == $root.selectedCategoryName()}"> 
-              <a  href="#" data-bind="click: $root.gotoCategory"><span data-bind="text: name"></span><span class="badge" data-bind="text:taskCount > 0 ? taskCount : ''"></span></a>
+              <a  href="#" data-bind="click: $root.gotoCategory"><span data-bind="text: name"></span><span class="badge" style="float:right;" data-bind="text:taskCount()==0 ? '' : taskCount"></span></a>
             </li>
         </ul>
 
@@ -76,22 +77,20 @@
             <div id="task-container" class="col-md-12">
                 <table class="table table-striped table-hover" >
                     <tbody data-bind="foreach: tasks">
-                    <tr data-bind="css: done() ? 'success' : favorite() ? 'danger' : ''" >
+                    <tr data-bind="css: done() ? 'success' : favorite() ? 'danger' : ''" class="task">
                         <td ><input type="CHECKBOX" data-bind="checked: done, click: $root.checkDone"/></td>
-                        <td><i style="padding-left: 5px;"></i>&nbsp;&nbsp;&nbsp;<a href="#"  data-bind="text: description, click: $root.taskClick"></a></td>
-                        <td data-bind="text: date"></td>
-                        <td data-bind="text: done() ? completeDate : ''"></td>
+                        <td >&nbsp;&nbsp;&nbsp;<a href="#"  data-bind="click: $root.taskClick"><span data-bind="text: description" class="taskDesc"></span></a></td>
+                        <td><span class="badge"  data-bind="text:subTaskCount()>0 ? subTaskCount : ''"></span></td>
                         <td class='custom-td'><div class="rating" data-bind="click: $root.ratingClick"><span data-bind="text: favorite() ? '&#9733;' : '&#9734;', style: {color: favorite() ? 'red' : 'black'}" ></span></div></td>
                         <td class='custom-td'><a href="javascript://" data-bind="click: $root.editTask"><i class="glyphicon glyphicon-edit"></i></a></td>
                         <td class='custom-td'><a href="javascript://" data-bind="click: $root.removeTask" ><i class="glyphicon glyphicon-trash"></i></a></td>
                     </tr>
                     </tbody>
                     <tbody data-bind="foreach: completeTasks">
-                    <tr data-bind="css: done() ? 'success' : favorite() ? 'danger' : ''">
+                    <tr data-bind="css: done() ? 'success' : favorite() ? 'danger' : ''" class="task">
                         <td ><input type="CHECKBOX" data-bind="checked: done, click: $root.checkDone"/></td>
-                        <td><i style="padding-left: 5px;"></i>&nbsp;&nbsp;&nbsp;<a href="#"  data-bind="text: description, click: $root.taskClick"></a></td>
-                        <td data-bind="text: date"></td>
-                        <td data-bind="text: done() ? completeDate : ''"></td>
+                        <td >&nbsp;&nbsp;&nbsp;<a href="#"  data-bind="click: $root.taskClick"><span data-bind="text: description" class="taskDesc"></span></a></td>
+                        <td><span class="badge"  data-bind="text:subTaskCount()>0 ? subTaskCount : ''"></span></td>
                         <td></td>
                         <td class='custom-td'><a href="javascript://" data-bind="click: $root.editTask"><i class="glyphicon glyphicon-edit"></i></a></td>
                         <td class='custom-td'><a href="javascript://" data-bind="click: $root.removeTask"><i class="glyphicon glyphicon-trash"></i></a></td>
