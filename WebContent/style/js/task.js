@@ -173,7 +173,6 @@ function TasksViewModel() {
 //         }
          if(jqXHR.status == 401){
 
-//        	 console.log(self.username);
         	 if(!self.username) 
         		 location.href = "login.html";
         	 else 
@@ -347,7 +346,6 @@ function TasksViewModel() {
     		self.selectedCategory().taskCount(self.selectedCategory().taskCount()+1);
     		
     	} 
-    	console.log( self.selectedCategory().taskCount() );
     	self.ajax(self.tasksURI+"/complete", 'POST',taskElem).done(function(data) {
     	});
     	
@@ -519,12 +517,15 @@ function TasksViewModel() {
     	}
     }
     
-    self.noteClick = function(){
+    self.noteClick = function(item,event){
+    	if(event.target.nodeName==='A'){
+    		window.open(event.target.href);
+    		return;
+    	}
     	var task = self.selectedTask();
     	var tasknote = task.note() ? task.note() : ''; 
     	tasknote = tasknote.replace(/<br\s*\/?>/mg,"&#13;&#10;");
     	tasknote = tasknote.replace(/(\r\n|\n|\r)/gm,"&#13;&#10;");
-    	console.log(tasknote);
     	 BootstrapDialog.show({
     		 title: 'Add Note',
              message: '<textarea class="form-control"  placeholder="Add Note..." >'+tasknote+'</textarea>',
