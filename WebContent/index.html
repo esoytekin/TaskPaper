@@ -20,12 +20,12 @@
     </head>
     <body>
     <div class = "container">
-    <div class="navbar navbar-default">
+    <div class="navbar navbar-default thin-shadowed">
         <div class="navbar-header">
             <a class="navbar-brand" href="#">T A S K P A P E R</a> 
         </div> 
     </div>
-    <div class="row" id="body" >
+    <div class="row " id="body" >
     <div class="col-md-3" style="display:block;">
         <ul class = "nav nav-pills nav-stacked" data-bind="foreach: categories">
             <li data-bind="css: {active: name == $root.selectedCategoryName()}"> 
@@ -40,7 +40,7 @@
         </ul>
     </div>
 
-    <div class="container-fluid" data-bind="css: $root.selectedTask() ? 'col-md-6' : 'col-md-9'"  style="display: block;" id="divTasks">
+    <div class="container-fluid transition" data-bind="css: $root.selectedTask() ? 'col-md-6' : 'col-md-9'"  style="display: block;" id="divTasks">
             <div id = "dispNone" style = "display:block">
             <div class="navbar navbar-default" >
                 <div class="navbar-header" id="navCategory">
@@ -72,7 +72,7 @@
             <br/>
             <div id="task-container" class="col-md-12">
                 <table class="table table-striped table-hover" >
-                    <tbody data-bind="foreach: tasks">
+                    <tbody data-bind="foreach: tasks, fadeVisible: tasks().length>0 ">
                     <tr data-bind="css: done() ? 'success' : favorite() ? 'danger' : ''" class="task">
                         <td ><input type="CHECKBOX" data-bind="checked: done, click: $root.checkDone"/></td>
                         <td >&nbsp;&nbsp;&nbsp;<a href="#"  data-bind="click: $root.taskClick"><span data-bind="text: description" class="taskDesc"></span></a></td>
@@ -82,7 +82,7 @@
                         <td class='custom-td'><a href="javascript://" data-bind="click: $root.removeTask" ><i class="glyphicon glyphicon-trash"></i></a></td>
                     </tr>
                     </tbody>
-                    <tbody data-bind="foreach: completeTasks">
+                    <tbody data-bind="foreach: completeTasks, fadeVisible: completeTasks().length>0 ">
                     <tr data-bind="css: done() ? 'success' : favorite() ? 'danger' : ''" class="task">
                         <td ><input type="CHECKBOX" data-bind="checked: done, click: $root.checkDone"/></td>
                         <td >&nbsp;&nbsp;&nbsp;<a href="#"  data-bind="click: $root.taskClick"><span data-bind="text: description" class="taskDesc"></span></a></td>
@@ -92,8 +92,6 @@
                         <td class='custom-td'><a href="javascript://" data-bind="click: $root.removeTask"><i class="glyphicon glyphicon-trash"></i></a></td>
                     </tr>
                     </tbody>
-                </table>
-                <table class="table table-striped table-hover">
                 </table>
             </div>
     </div>

@@ -6,23 +6,36 @@
 //	  $(".btnCategory").fadeOut();
 //  }
 //);
-ko.bindingHandlers.jqButton = {
-    init: function(element, valueAccessor){
-        var currentVal = valueAccessor();
-        
-    },
-    update: function(element, valueAccessor){
-        var currentVal = valueAccessor();
-    }
- 
-};
 
 ko.bindingHandlers.fadeVisible = {
 		
 		init: function(element, valueAccessor){},
 		update: function(element, valueAccessor){
 			var shouldDisplay = valueAccessor();
-			shouldDisplay ? $(element).fadeIn() : $(element).hide();
+//			shouldDisplay ? $(element).fadeIn() : $(element).hide();
+			if(shouldDisplay){
+				setTimeout(function(){
+					$(element).fadeIn()
+				},500);
+			}else{
+				$(element).hide()
+			}
+		}
+};
+
+//Unused
+ko.bindingHandlers.narrow = {
+		init: function(element, value){},
+		update: function(element,value){
+			var shouldDisplay = value();
+			if(shouldDisplay){
+					$(element).removeClass("col-md-9");
+					$(element).addClass("col-md-6");
+			}else{
+					$(element).removeClass("col-md-6");
+					$(element).addClass("col-md-9");
+				
+			}
 		}
 };
 
