@@ -55,8 +55,10 @@ function LoginViewModel() {
 			alert("Wrong username or password..","Authentication Failed",BootstrapDialog.TYPE_DANGER);
 		}
 		location.hash='';
-    	delCookie("username");
-    	delCookie("password");
+//    	delCookie("username");
+//    	delCookie("password");
+		window.localStorage.removeItem("username");
+		window.localStorage.removeItem("password");
 	}
     self.ajax = function(uri, method, data) {
         progressBar.open();
@@ -102,8 +104,10 @@ function LoginViewModel() {
 			return;
 		}
 
-		setCookie("username",loginElement.username(),30);
-		setCookie("password",loginElement.password(),30);
+//		setCookie("username",loginElement.username(),30);
+//		setCookie("password",loginElement.password(),30);
+		window.localStorage.setItem("username",loginElement.username());
+		window.localStorage.setItem("password",loginElement.username());
 		location.href = "index.html";
 	}
 	

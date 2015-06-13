@@ -159,8 +159,10 @@ function TasksViewModel() {
     	baseUrl = 'http://'+baseUrl+':8080/TaskPaper/rest/todos';
     }
     self.tasksURI = baseUrl;
-    self.username = getCookie('username');
-    self.password = getCookie('password');
+//    self.username = getCookie('username');
+//    self.password = getCookie('password');
+    self.username = window.localStorage.getItem('username');
+    self.password = window.localStorage.getItem('password');
     self.selectedCategoryName = ko.observable();
     self.selectedCategory= ko.observable();
     self.selectedController = ko.observable();
@@ -439,8 +441,10 @@ function TasksViewModel() {
     */
 
     self.logout = function(){
-    	delCookie("username");
-    	delCookie("password");
+//    	delCookie("username");
+//    	delCookie("password");
+    	window.localStorage.removeItem("username");
+    	window.localStorage.removeItem("password");
     	location.href = "login.html";
     	self.selectedController(this.name);
     }
