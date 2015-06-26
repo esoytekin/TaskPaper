@@ -11,7 +11,7 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.4/js/bootstrap-dialog.min.js"></script>
     
-
+	<script src="style/js/sammy.js"></script>
     <script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.1.0.js"></script>       
     <script src="style/js/Markdown.Converter.js" type="text/javascript" charset="utf-8"></script>
     <script src="style/js/util.js" type="text/javascript" charset="utf-8"></script>
@@ -41,25 +41,25 @@
     </div>
 
     <div class="container-fluid transition" data-bind="css: $root.selectedTask() ? 'col-md-6' : 'col-md-9'"  style="display: block;" id="divTasks">
-            <div id = "dispNone" style = "display:block">
+        <div id = "dispNone" style = "display:block">
             <div class="navbar navbar-default" >
                 <div class="navbar-header" id="navCategory">
-                <table class="table" style="margin-bottom: 0px">
-                <tr>
-                <td>
-                <a class="navbar-brand" href="#" data-bind="" id="lnkSelectedCategory"> 
-                <small data-bind="text: selectedCategoryName()"></small> 
-                </a> 
-                </td>
-                <td style="vertical-align: middle;">
-                <a id="btnEditCategory"  href ="#" data-bind="visible:$root.selectedCategoryName() != 'Inbox',click: editCategory" class = "glyphicon glyphicon-edit btnCategory"></a>
-                </td>
-                <td style="vertical-align: middle;">
-                <a id="btnDeleteCategory"   href ="#" data-bind="visible:$root.selectedCategoryName() != 'Inbox',click: deleteCategory" class = "glyphicon glyphicon-trash btnCategory"></a>
-                </td>
-                </tr>
-                </table>
-            </div>
+                    <table class="table" style="margin-bottom: 0px">
+                        <tr>
+                            <td>
+                                <a class="navbar-brand" href="#" data-bind="" id="lnkSelectedCategory"> 
+                                    <small data-bind="text: selectedCategoryName()"></small> 
+                                </a> 
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <a id="btnEditCategory"  href ="#" data-bind="visible:$root.selectedCategoryName() != 'Inbox',click: editCategory" class = "glyphicon glyphicon-edit btnCategory"></a>
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <a id="btnDeleteCategory"   href ="#" data-bind="visible:$root.selectedCategoryName() != 'Inbox',click: deleteCategory" class = "glyphicon glyphicon-trash btnCategory"></a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
             <div  class="col-md-12">
                 <form role="form" accept-charset="utf-8" data-bind="submit: addTask">
@@ -72,29 +72,11 @@
             <br/>
             <div id="task-container" class="col-md-12">
                 <table class="table table-striped table-hover" >
-                    <tbody data-bind="foreach: tasks, fadeVisible: tasks().length>0 ">
-                    <tr data-bind="css: done() ? 'success' : favorite() ? 'danger' : ''" class="task">
-                        <td ><input type="CHECKBOX" data-bind="checked: done, click: $root.checkDone"/></td>
-                        <td >&nbsp;&nbsp;&nbsp;<a href="#"  data-bind="click: $root.taskClick"><span data-bind="text: description" class="taskDesc"></span></a></td>
-                        <td><span class="badge"  data-bind="text:subTaskCount()>0 ? subTaskCount : ''"></span></td>
-                        <td class='custom-td'><div class="rating" data-bind="click: $root.ratingClick"><span data-bind="text: favorite() ? '&#9733;' : '&#9734;', style: {color: favorite() ? 'red' : 'black'}" ></span></div></td>
-                        <td class='custom-td'><a href="javascript://" data-bind="click: $root.editTask"><i class="glyphicon glyphicon-edit"></i></a></td>
-                        <td class='custom-td'><a href="javascript://" data-bind="click: $root.removeTask" ><i class="glyphicon glyphicon-trash"></i></a></td>
-                    </tr>
-                    </tbody>
-                    <tbody data-bind="foreach: completeTasks, fadeVisible: completeTasks().length>0 ">
-                    <tr data-bind="css: done() ? 'success' : favorite() ? 'danger' : ''" class="task">
-                        <td ><input type="CHECKBOX" data-bind="checked: done, click: $root.checkDone"/></td>
-                        <td >&nbsp;&nbsp;&nbsp;<a href="#"  data-bind="click: $root.taskClick"><span data-bind="text: description" class="taskDesc"></span></a></td>
-                        <td><span class="badge"  data-bind="text:subTaskCount()>0 ? subTaskCount : ''"></span></td>
-                        <td></td>
-                        <td class='custom-td'><a href="javascript://" data-bind="click: $root.editTask"><i class="glyphicon glyphicon-edit"></i></a></td>
-                        <td class='custom-td'><a href="javascript://" data-bind="click: $root.removeTask"><i class="glyphicon glyphicon-trash"></i></a></td>
-                    </tr>
-                    </tbody>
+                    <tbody data-bind="template: {name: 'task-template', foreach: tasks }, fadeVisible: tasks().length>0"></tbody>
+                    <tbody data-bind="template: {name: 'task-template', foreach: completeTasks }, fadeVisible: completeTasks().length>0"></tbody>
                 </table>
             </div>
-    </div>
+        </div>
     </div>
     <div class="container-fluid col-md-3"  data-bind="fadeVisible: $root.selectedTask()" >
             <div class="alert " role="alert" data-bind="css: $root.selectedTask() &&  ($root.selectedTask().done() ? 'alert-success' : $root.selectedTask().favorite() ? 'alert-danger' : 'alert-info')" >
@@ -107,30 +89,16 @@
                 </form>
             <div id="sub-task-container" >
                 <table class="table table-striped table-hover" >
-                    <tbody data-bind="foreach: subtasks">
-                    <tr data-bind="css: done() ? 'success' : favorite() ? 'danger' : ''" >
-                        <td ><input type="CHECKBOX" data-bind="checked: done, click: $root.checkSubtaskDone"/></td>
-                        <td data-bind="text: description"></td>
-                        <td><div class="rating" data-bind="click: $root.subtaskRatingClick"><span data-bind="text: favorite() ? '&#9733;' : '&#9734;', style: {color: favorite() ? 'red' : 'black'}" ></span></div></td>
-                        <td ><a href="javascript://" data-bind="click: $root.removeSubTask" ><i class="glyphicon glyphicon-trash"></i></a></td>
-                    </tr>
-                    </tbody>
-                    <tbody data-bind="foreach: completeSubtasks">
-                    <tr data-bind="css: done() ? 'success' : favorite() ? 'danger' : ''">
-                        <td ><input type="CHECKBOX" data-bind="checked: done, click: $root.checkSubtaskDone"/></td>
-                        <td data-bind="text: description"></td>
-                        <td></td>
-                        <td ><a href="javascript://" data-bind="click: $root.removeSubTask"><i class="glyphicon glyphicon-trash"></i></a></td>
-                    </tr>
-                    </tbody>
+                	<tbody data-bind="template: {name: 'subtask-template', foreach: subtasks}"></tbody>
+                	<tbody data-bind="template: {name: 'subtask-template', foreach: completeSubtasks}"></tbody>
                 </table>
             </div>
             <div class="alert alert-warning">
-            Notes&nbsp;&nbsp;&nbsp;
-            <i class="glyphicon glyphicon-pencil"></i>
-            <a href="javascript://" class="glyphicon glyphicon-fullscreen" 
-            data-bind="visible:$root.selectedTask() && $root.selectedTask().note(),click: $root.noteFullScreen" 
-            style="float:right"></a> 
+                Notes&nbsp;&nbsp;&nbsp;
+                <i class="glyphicon glyphicon-pencil"></i>
+                <a href="javascript://" class="glyphicon glyphicon-fullscreen" 
+                data-bind="visible:$root.selectedTask() && $root.selectedTask().note(),click: $root.noteFullScreen" 
+                style="float:right"></a> 
             </div>
             <div class="TaskNote" data-bind="click: noteClick" >
             <p data-bind="html: $root.selectedTask() && $root.selectedTask().note() ? $root.selectedTask().parsedNote(): 'Click to add note...'"></p>
@@ -146,6 +114,29 @@
 
     </div>
     
+    <script type="text/html" id="task-template">
+
+            <tr data-bind="css: done() ? 'success' : favorite() ? 'danger' : ''" class="task">
+                <td ><input type="CHECKBOX" data-bind="checked: done, click: $root.checkDone"/></td>
+                <td >&nbsp;&nbsp;&nbsp;<a href="#"  data-bind="click: $root.taskClick"><span data-bind="text: description" class="taskDesc"></span></a></td>
+                <td><span class="badge"  data-bind="text:subTaskCount()>0 ? subTaskCount : ''"></span></td>
+                <td class='custom-td' ><div class="rating" data-bind="visible:done()===false,click: $root.ratingClick, enabled: done===false"><span data-bind="text: favorite() ? '&#9733;' : '&#9734;', style: {color: favorite() ? 'red' : 'black'}" ></span></div></td>
+                <td class='custom-td'><a href="javascript://" data-bind="click: $root.editTask"><i class="glyphicon glyphicon-edit"></i></a></td>
+                <td class='custom-td'><a href="javascript://" data-bind="click: $root.removeTask" ><i class="glyphicon glyphicon-trash"></i></a></td>
+            </tr>
+
+	</script>
+	
+	<script type="text/html" id="subtask-template">
+            <tr data-bind="css: done() ? 'success' : favorite() ? 'danger' : ''" >
+                <td ><input type="CHECKBOX" data-bind="checked: done, click: $root.checkSubtaskDone"/></td>
+                <td data-bind="text: description"></td>
+                <td><div class="rating" data-bind="visible: done()===false,click: $root.subtaskRatingClick"><span data-bind="text: favorite() ? '&#9733;' : '&#9734;', style: {color: favorite() ? 'red' : 'black'}" ></span></div></td>
+                <td ><a href="javascript://" data-bind="click: $root.removeSubTask" ><i class="glyphicon glyphicon-trash"></i></a></td>
+            </tr>
+	</script>
+    
     <script src="style/js/task.js" type="text/javascript" charset="utf-8"></script>
+
     </body>
 </html>

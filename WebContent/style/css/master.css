@@ -25,7 +25,7 @@
 }
 
 .activeTask {
-	border: solid 2px #c4c4c4;
+	border: solid 1px #c6e89f;
 }
 .taskDesc{
 	display: inline-block;

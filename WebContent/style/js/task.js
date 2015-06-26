@@ -252,10 +252,13 @@ function TasksViewModel() {
 
     self.gotoCategory = function(category){
 
-      self.selectedCategoryName(category.name);
+
       self.selectedCategory(category);
-      self.getTasks(category.name);
-      self.selectedTask('');
+      location.hash = category.name;
+
+//      self.selectedCategoryName(category.name);
+//      self.getTasks(category.name);
+//      self.selectedTask('');
     };
     
     self.getCategories = function(){
@@ -680,6 +683,17 @@ function TasksViewModel() {
     
     
     self.modalVisible = true; 
+    
+    Sammy(function(){
+    	this.get("#:category",function(){
+    		var categoryName = this.params.category;
+    		
+              self.selectedCategoryName(categoryName);
+              self.getTasks(categoryName);
+              self.selectedTask('');
+    	});
+    }).run();
+    
 }
 ko.applyBindings(new TasksViewModel());
 

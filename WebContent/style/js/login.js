@@ -104,8 +104,6 @@ function LoginViewModel() {
 			return;
 		}
 
-//		setCookie("username",loginElement.username(),30);
-//		setCookie("password",loginElement.password(),30);
 		window.localStorage.setItem("username",loginElement.username());
 		window.localStorage.setItem("password",loginElement.password());
 		location.href = "index.html";
