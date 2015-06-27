@@ -195,9 +195,8 @@ function TasksViewModel() {
          }
          if(jqXHR.status == 0){
         	 //handle CORS
-//            self.tasksURI = 'http://localhost:8080/TaskPaper/rest/todos';
-//        	setCookie('tasksUri', self.tasksURI, 30);
-//        	location.href='index.html';
+                 console.log("handle CORS");
+                 location.href = "login.html#CORS";
          }
     }
     self.ajax = function(uri, method, data) {

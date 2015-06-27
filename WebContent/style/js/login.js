@@ -53,7 +53,9 @@ function LoginViewModel() {
 	self.checkFailAuth = function(){ 
 		if(location.hash=='#authFailed'){ 
 			alert("Wrong username or password..","Authentication Failed",BootstrapDialog.TYPE_DANGER);
-		}
+		}else if(location.hash=="#CORS"){
+			alert("CORS is not supported yet!","Authentication Failed",BootstrapDialog.TYPE_DANGER);
+                }
 		location.hash='';
 //    	delCookie("username");
 //    	delCookie("password");
