@@ -125,7 +125,7 @@
 
             <tr data-bind="css: done() ? 'success' : favorite() ? 'danger' : ''" class="task">
                 <td ><input type="CHECKBOX" data-bind="checked: done, click: $root.checkDone"/></td>
-                <td >&nbsp;&nbsp;&nbsp;<a href="#"  data-bind="click: $root.taskClick"><span data-bind="text: description" class="taskDesc"></span></a></td>
+                <td ><a href="#"  data-bind="click: $root.taskClick"><span data-bind="text: description" class="taskDesc"></span></a></td>
                 <td><span class="badge"  data-bind="text:subTaskCount()>0 ? subTaskCount : ''"></span></td>
                 <td class='custom-td' ><div class="rating" data-bind="visible:done()===false,click: $root.ratingClick, enabled: done===false"><span data-bind="text: favorite() ? '&#9733;' : '&#9734;', style: {color: favorite() ? 'red' : 'black'}" ></span></div></td>
                 <td class='custom-td'><a href="javascript://" data-bind="click: $root.editTask"><i class="glyphicon glyphicon-edit"></i></a></td>
