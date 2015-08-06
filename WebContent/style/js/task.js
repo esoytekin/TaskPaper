@@ -181,6 +181,7 @@ function TasksViewModel() {
     self.selectedController = ko.observable();
     self.selectedTask = ko.observable('');
     self.selectedNote= ko.observable('');
+    self.showCompleted = ko.observable(false);
     self.handleError = function(jqXHR){
          console.log("ajax error " + jqXHR.status);
 //         for(var props in jqXHR){
@@ -682,6 +683,9 @@ function TasksViewModel() {
     
     
     self.modalVisible = true; 
+    self.toggleCompleted = function(){
+    	self.showCompleted(!self.showCompleted());
+    }
     
     Sammy(function(){
     	this.get("#:category",function(){

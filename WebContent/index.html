@@ -73,7 +73,14 @@
             <div id="task-container" class="col-md-12">
                 <table class="table table-striped table-hover" >
                     <tbody data-bind="template: {name: 'task-template', foreach: tasks }, fadeVisible: tasks().length>0"></tbody>
-                    <tbody data-bind="template: {name: 'task-template', foreach: completeTasks }, fadeVisible: completeTasks().length>0"></tbody>
+                </table>
+<!--                 
+				Completed Items
+ -->
+                <a class="showCompleted" href="javascript://" data-bind="click: toggleCompleted, fadeVisible: completeTasks().length>0"><span>Completed Items</span><span class="badge" style="margin-left: 10px;" data-bind="text: completeTasks().length" ></span></a>
+
+                <table class="table table-striped table-hover" data-bind="visible: showCompleted()">
+                    <tbody data-bind="template: {name: 'task-template', foreach: completeTasks } "></tbody>
                 </table>
             </div>
         </div>

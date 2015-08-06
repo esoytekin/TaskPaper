@@ -55,3 +55,17 @@
     -o-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
+
+.showCompleted{
+	background-color: lightblue;
+    color: white;
+    display: block;
+    margin-bottom: 5px;
+    padding: 5px;
+    text-decoration: none;	
+}
+
+.showCompleted:hover{
+	color: gray;
+    text-decoration: none;	
+}
