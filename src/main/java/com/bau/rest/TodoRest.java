@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.bau.rest.entity.Category;
 import com.bau.rest.entity.SubTask;
 import com.bau.rest.entity.Task;
+import com.bau.rest.pojo.Repeater;
 import com.bau.rest.service.TaskpaperServices;
 
 @Component
@@ -150,6 +151,17 @@ public class TodoRest {
 		Task t = taskPaperServices.getTaskById(id);
 		t.setFavorite(favorite);
 		taskPaperServices.updateTask(t);
+	}
+	
+	@RequestMapping(value="/repeater",method=RequestMethod.POST)
+	@ResponseBody
+	public Category setRepeater(@RequestParam Long id, @RequestParam String repeater){
+		System.out.println("Id : " + id);
+		System.out.println("Repeater: " + repeater);
+		Category c = taskPaperServices.getCategoryById(id);
+		c.setRepeater(Repeater.valueOf(repeater.toUpperCase()));
+		taskPaperServices.updateCategory(c);
+		return c;
 	}
 
 	@RequestMapping(value="/subtask/favorite",method=RequestMethod.POST)

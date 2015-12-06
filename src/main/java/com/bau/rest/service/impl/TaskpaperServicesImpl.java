@@ -1,5 +1,6 @@
 package com.bau.rest.service.impl;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -77,6 +78,60 @@ public class TaskpaperServicesImpl implements TaskpaperServices{
 		for (Category category : categories) {
 			long taskCount = taskDAO.getTaskCountByCategory(category);
 			category.setTaskCount(taskCount);
+			
+			if(category.getRepeater() != null){
+				Calendar c = Calendar.getInstance();
+				c.set(Calendar.HOUR, 0);
+				c.set(Calendar.MINUTE, 0);
+				c.set(Calendar.SECOND, 0);
+				switch (category.getRepeater()) {
+				case NO_REPEAT:
+					break;
+				case DAILY:
+					List<Task> tasks = getTasksByCategory(category);
+					for (Task task : tasks) {
+						Date completeDate = task.getCompleteDate();
+						if(completeDate.getTime()<c.getTimeInMillis()){
+							if(task.getDone()){
+								task.setDone(false);
+								updateTask(task);
+							}
+						}
+					}
+					
+					break;
+				case WEEKLY:
+					c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+					tasks = getTasksByCategory(category);
+					for (Task task : tasks) {
+						Date completeDate = task.getCompleteDate();
+						if(completeDate.getTime()<c.getTimeInMillis()){
+							if(task.getDone()){
+								task.setDone(false);
+								updateTask(task);
+							}
+						}
+					}
+					
+					break;
+				case MONTHLY:
+					c.set(Calendar.DAY_OF_MONTH, 1);
+					tasks = getTasksByCategory(category);
+					for (Task task : tasks) {
+						Date completeDate = task.getCompleteDate();
+						if(completeDate.getTime()<c.getTimeInMillis()){
+							if(task.getDone()){
+								task.setDone(false);
+								updateTask(task);
+							}
+						}
+					}
+					
+					break;
+				default:
+					break;
+				}
+			}
 		}
 		return categories;
 	}

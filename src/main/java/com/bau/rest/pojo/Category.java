@@ -11,6 +11,8 @@ public class Category {
 	private Date date;
 	
 	private Boolean enabled;
+	
+	private Repeater repeater;
 
 	public Long getId() {
 		return id;
@@ -42,6 +44,14 @@ public class Category {
 
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
+	}
+	
+	public Repeater getRepeater() {
+		return repeater;
+	}
+	
+	public void setRepeater(Repeater repeater) {
+		this.repeater = repeater;
 	}
 
 	@Override

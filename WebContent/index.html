@@ -43,13 +43,26 @@
     <div class="container-fluid transition" data-bind="css: $root.selectedTask() ? 'col-md-6' : 'col-md-9'"  style="display: block;" id="divTasks">
         <div id = "dispNone" style = "display:block">
             <div class="navbar navbar-default" >
-                <div class="navbar-header" id="navCategory">
+                <div class="navbar-header" id="navCategory" style="width: 100%;">
                     <table class="table" style="margin-bottom: 0px">
                         <tr>
                             <td>
                                 <a class="navbar-brand" href="#" data-bind="" id="lnkSelectedCategory"> 
                                     <small data-bind="text: selectedCategoryName()"></small> 
                                 </a> 
+                            </td>
+                            <td style="vertical-align: middle; align: right;">
+                            	
+                            	<div class="btn-group">
+                                  <button type="button" class="btn btn-default" data-bind="text: $root.selectedCategory() ? ($root.selectedCategory().repeater() ? $root.selectedCategory().repeater() : 'Repeat') : 'Repeat'"></button>
+                                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                  </button>
+                                  <ul class="dropdown-menu" data-bind="foreach: repeaters">
+                                    <li><a href="#" data-bind="text:$data,click: $root.setRepeat"></a></li>
+                                  </ul>
+                                </div>
                             </td>
                             <td style="vertical-align: middle;">
                                 <a id="btnEditCategory"  href ="#" data-bind="visible:$root.selectedCategoryName() != 'Inbox',click: editCategory" class = "glyphicon glyphicon-edit btnCategory"></a>
@@ -89,11 +102,13 @@
             <div class="alert " role="alert" data-bind="css: $root.selectedTask() &&  ($root.selectedTask().done() ? 'alert-success' : $root.selectedTask().favorite() ? 'alert-danger' : 'alert-info')" >
                 <span data-bind="text: $root.selectedTask().description"></span>
             </div>
-                <form role="form" accept-charset="utf-8" data-bind="submit: addSubtask">
-                    <div class="form-group" >
-                    <input type="TEXT" class="form-control"  required data-bind="value:newSubtaskDescription, attr: {placeholder: 'Add an item to ' + ( $root.selectedTask() ? $root.selectedTask().description() : '' )  }, disable: $root.selectedTask() && $root.selectedTask().done()">
-                    </div>
-                </form>
+            <div>
+            <form role="form" accept-charset="utf-8" data-bind="submit: addSubtask">
+                <div class="form-group" >
+                <input type="TEXT" class="form-control"  required data-bind="value:newSubtaskDescription, attr: {placeholder: 'Add an item to ' + ( $root.selectedTask() ? $root.selectedTask().description() : '' )  }, disable: $root.selectedTask() && $root.selectedTask().done()">
+                </div>
+            </form>
+            </div>
             <div id="sub-task-container" >
                 <table class="table table-striped table-hover" >
                 	<tbody data-bind="template: {name: 'subtask-template', foreach: subtasks}"></tbody>
@@ -112,8 +127,8 @@
             </div>
             <hr />
             <div>
-                    <div class="label label-success" >Started: <span data-bind="text: $root.selectedTask().date"></span></div>
-                    <div  class="label label-primary"  data-bind="style: {display: ( $root.selectedTask() && $root.selectedTask().done() ) ? '' : 'none'}">Completed: <span data-bind="text: $root.selectedTask().completeDate"></span></div>
+                <div class="label label-success" >Started: <span data-bind="text: $root.selectedTask().date"></span></div>
+                <div  class="label label-primary"  data-bind="style: {display: ( $root.selectedTask() && $root.selectedTask().done() ) ? '' : 'none'}">Completed: <span data-bind="text: $root.selectedTask().completeDate"></span></div>
             </div>
     </div>
 

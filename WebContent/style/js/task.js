@@ -88,6 +88,7 @@ var todoTask = function(description,rawDate){
 
 		}
 	});
+
 }
 
 var todoTask2 = function(data){
@@ -119,6 +120,12 @@ var todoController = function(name,id,event){
 	
 }
 
+var Repeater = function (name,id){
+	var self = this;
+	self.name = name;
+	self.id = id;
+}
+
 var todoCategory = function(categoryName,rawDate){
 	var self = this;
 	self.name = categoryName;
@@ -132,6 +139,8 @@ var todoCategory = function(categoryName,rawDate){
         var dateFull = month + '/' + day + '/' + year;
         return dateFull;
     });
+    
+    self.repeater = ko.observable();
 
 	
 }
@@ -182,6 +191,7 @@ function TasksViewModel() {
     self.selectedTask = ko.observable('');
     self.selectedNote= ko.observable('');
     self.showCompleted = ko.observable(false);
+    self.asyncCompleted = false;
     self.handleError = function(jqXHR){
          console.log("ajax error " + jqXHR.status);
 //         for(var props in jqXHR){
@@ -262,6 +272,7 @@ function TasksViewModel() {
     };
     
     self.getCategories = function(){
+    	self.asyncCompleted = false;
     	self.ajax(self.tasksURI+"/getCategories",'GET').done(function(data){
     		self.categories([]);
     		var cat;
@@ -270,11 +281,14 @@ function TasksViewModel() {
     			cat.taskCount(data[i].taskCount);
     			cat.enabled= data[i].enabled;
     			cat.id=data[i].id;
+    			cat.repeater(data[i].repeater);
+
     			self.categories.push(cat);
     		}
     		if (!self.selectedCategoryName()){
     			self.gotoCategory(self.categories()[0]);
     		}
+    		self.asyncCompleted = true;
     	});
     }
     
@@ -498,6 +512,23 @@ function TasksViewModel() {
     self.controllers.push(new todoController("Add New Item",1,self.addNewItem));
     self.controllers.push(new todoController("Logout",2,self.logout));
 
+    self.repeaters = [];
+    self.repeaters.push("NO_REPEAT");
+    self.repeaters.push("DAILY");
+    self.repeaters.push("WEEKLY");
+    self.repeaters.push("MONTHLY");
+
+    self.setRepeat = function(repeater){
+        console.log(self.selectedCategory());
+        if(self.selectedCategory()){
+        	self.selectedCategory().repeater(repeater);
+        	self.ajax(self.tasksURI+'/repeater','POST',self.selectedCategory()).done(function(data){
+        	});
+        	
+        }
+    	
+    }
+
 
     BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_DEFAULT] = 'Information';
     BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_INFO] = 'Information';
@@ -687,6 +718,15 @@ function TasksViewModel() {
     	self.showCompleted(!self.showCompleted());
     }
     
+    function sleep(milliseconds) {
+    	var start = new Date().getTime();
+    	for (var i = 0; i < 1e7; i++) {
+    		if ((new Date().getTime() - start) > milliseconds){
+    			break;
+    		}
+    	}
+    }
+
     Sammy(function(){
     	this.get("#:category",function(){
     		var categoryName = this.params.category;
@@ -694,6 +734,27 @@ function TasksViewModel() {
               self.selectedCategoryName(categoryName);
               self.getTasks(categoryName);
               self.selectedTask('');
+              self.getCategories();
+              if(!self.asyncCompleted)
+              {
+            	  setTimeout(function(){
+            		  if(self.asyncCompleted){
+            			  for (var int = 0; int < self.categories().length; int++) {
+            				  var cat = self.categories()[int];
+            				  if(categoryName == cat.name){
+            					  self.gotoCategory(cat);
+            					  break;
+            				  }
+            			  }
+            		  }
+            		  
+            	  },1000);
+
+            	  
+              }
+//              while (!self.asyncCompleted){
+//              }
+            	  
     	});
     }).run();
     

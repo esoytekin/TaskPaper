@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,6 +17,8 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
+
+import com.bau.rest.pojo.Repeater;
 
 @Entity
 @Table(name="C_CATEGORY")
@@ -40,6 +44,10 @@ public class Category {
 	@Type(type="yes_no")
 	private Boolean enabled;
 	
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name="REPEATER")
+	private Repeater repeater;
 	
 	@Transient
 	private Long taskCount;
@@ -90,6 +98,15 @@ public class Category {
 	
 	public void setTaskCount(Long taskCount) {
 		this.taskCount = taskCount;
+	}
+	
+	public Repeater getRepeater() {
+		return repeater;
+	}
+	
+	
+	public void setRepeater(Repeater repeater) {
+		this.repeater = repeater;
 	}
 	
 }
