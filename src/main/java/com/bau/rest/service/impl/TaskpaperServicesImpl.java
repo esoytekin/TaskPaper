@@ -118,10 +118,11 @@ public class TaskpaperServicesImpl implements TaskpaperServices{
 					c.set(Calendar.DAY_OF_MONTH, 1);
 					tasks = getTasksByCategory(category);
 					for (Task task : tasks) {
-						Date completeDate = task.getCompleteDate();
-						if(completeDate.getTime()<c.getTimeInMillis()){
-							if(task.getDone()){
+						if(task.getDone()){
+							Date completeDate = task.getCompleteDate();
+							if(completeDate.getTime()<c.getTimeInMillis()){
 								task.setDone(false);
+								task.setCompleteDate(null);
 								updateTask(task);
 							}
 						}

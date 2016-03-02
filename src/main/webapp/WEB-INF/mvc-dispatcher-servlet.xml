@@ -23,9 +23,13 @@
 <!-- 		<property name = "url"  value="jdbc:mysql://47.168.150.224/wvm224" /> -->
 <!-- 		<property name = "username"  value="emrahs" /> -->
 <!-- 		<property name = "password"  value="My5q!Mgr" /> -->
-		<property name="url" value="jdbc:mysql://127.0.0.1/bau" />
-		<property name="username" value="bau" />
-		<property name="password" value="bau" />
+<!-- 		<property name="url" value="jdbc:mysql://192.168.1.105/bau" /> -->
+ 		<property name="url" value="jdbc:mysql://localhost/bau" /> 
+		
+ 		<property name="username" value="root" />
+		<property name="password" value="" />
+<!-- 		<property name="username" value="emrahs" />
+		<property name="password" value="emrah1234" /> -->
 	</bean>
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">

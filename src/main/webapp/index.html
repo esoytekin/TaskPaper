@@ -26,7 +26,7 @@
         </div> 
     </div>
     <div class="row " id="body" >
-    <div class="col-md-3" style="display:block;">
+    <div class="well col-md-3" style="display:block;">
         <ul class = "nav nav-pills nav-stacked" data-bind="foreach: categories">
             <li data-bind="css: {active: name == $root.selectedCategoryName()}"> 
               <a  href="#" data-bind="click: $root.gotoCategory"><span data-bind="text: name"></span><span class="badge" style="float:right;" data-bind="text:taskCount()==0 ? '' : taskCount"></span></a>
@@ -139,22 +139,40 @@
     <script type="text/html" id="task-template">
 
             <tr data-bind="css: done() ? 'success' : favorite() ? 'danger' : ''" class="task">
-                <td ><input type="CHECKBOX" data-bind="checked: done, click: $root.checkDone"/></td>
+                <td style="width: 1%;" ><input type="CHECKBOX" data-bind="checked: done, click: $root.checkDone"/></td>
                 <td ><a href="#"  data-bind="click: $root.taskClick"><span data-bind="text: description" class="taskDesc"></span></a></td>
-                <td><span class="badge"  data-bind="text:subTaskCount()>0 ? subTaskCount : ''"></span></td>
-                <td class='custom-td' ><div class="rating" data-bind="visible:done()===false,click: $root.ratingClick, enabled: done===false"><span data-bind="text: favorite() ? '&#9733;' : '&#9734;', style: {color: favorite() ? 'red' : 'black'}" ></span></div></td>
-                <td class='custom-td'><a href="javascript://" data-bind="click: $root.editTask"><i class="glyphicon glyphicon-edit"></i></a></td>
-                <td class='custom-td'><a href="javascript://" data-bind="click: $root.removeTask" ><i class="glyphicon glyphicon-trash"></i></a></td>
+                <td style="width: 1%; vertical-align: middle"><span class="badge"  data-bind="text:subTaskCount()>0 ? subTaskCount : ''"></span></td>
+                <td style="width: 1%;">
+                <span class="input-group-btn">
+                <button class="btn btn-default" data-bind="visible:done()===false,click: $root.ratingClick, enabled: done===false">
+                <div class="rating" >
+                <span data-bind="text: favorite() ? '&#9733;' : '&#9734;', style: {color: favorite() ? 'red' : 'black'}" ></span></div>
+                </button>
+                <button class="btn btn-default" data-bind="click: $root.editTask"><i class="glyphicon glyphicon-edit"></i></button>
+                <button  class="btn btn-default" data-bind="click: $root.removeTask" ><i class="glyphicon glyphicon-trash"></i></button>
+                
+                </span>
+                </td>
             </tr>
 
 	</script>
 	
 	<script type="text/html" id="subtask-template">
             <tr data-bind="css: done() ? 'success' : favorite() ? 'danger' : ''" >
-                <td ><input type="CHECKBOX" data-bind="checked: done, click: $root.checkSubtaskDone"/></td>
+                <td style="width: 1%"><input type="CHECKBOX" data-bind="checked: done, click: $root.checkSubtaskDone"/></td>
                 <td data-bind="text: description"></td>
-                <td><div class="rating" data-bind="visible: done()===false,click: $root.subtaskRatingClick"><span data-bind="text: favorite() ? '&#9733;' : '&#9734;', style: {color: favorite() ? 'red' : 'black'}" ></span></div></td>
-                <td ><a href="javascript://" data-bind="click: $root.removeSubTask" ><i class="glyphicon glyphicon-trash"></i></a></td>
+                <td style="width: 1%">
+                <span class="input-group-btn">
+                <button class="btn btn-default" data-bind="visible: done()===false,click: $root.subtaskRatingClick">
+                <div class="rating" >
+                <span data-bind="text: favorite() ? '&#9733;' : '&#9734;', style: {color: favorite() ? 'red' : 'black'}" ></span>
+                </div>
+                </button>
+                <button class="btn btn-default" data-bind="click: $root.removeSubTask" >
+                <i class="glyphicon glyphicon-trash"></i>
+                </button>
+                <span>
+                </td>
             </tr>
 	</script>
     
