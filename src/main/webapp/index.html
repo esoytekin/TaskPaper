@@ -51,24 +51,19 @@
                                     <small data-bind="text: selectedCategoryName()"></small> 
                                 </a> 
                             </td>
-                            <td style="vertical-align: middle; align: right;">
-                            	
-                            	<div class="btn-group">
-                                  <button type="button" class="btn btn-default" data-bind="text: $root.selectedCategory() ? ($root.selectedCategory().repeater() ? $root.selectedCategory().repeater() : 'Repeat') : 'Repeat'"></button>
-                                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <td style="vertical-align: middle; width: 1%;">
+                            <span class="input-group-btn">
+                                <button  class="disabled glyphicon btn btn-primary" data-bind="text: $root.selectedCategory() ? ($root.selectedCategory().repeater() ? $root.selectedCategory().repeater() : 'Repeat') : 'Repeat'"></button>
+                                <button  class="glyphicon btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="caret"></span>
                                     <span class="sr-only">Toggle Dropdown</span>
-                                  </button>
-                                  <ul class="dropdown-menu" data-bind="foreach: repeaters">
-                                    <li><a href="#" data-bind="text:$data,click: $root.setRepeat"></a></li>
-                                  </ul>
-                                </div>
-                            </td>
-                            <td style="vertical-align: middle;">
-                                <a id="btnEditCategory"  href ="#" data-bind="visible:$root.selectedCategoryName() != 'Inbox',click: editCategory" class = "glyphicon glyphicon-edit btnCategory"></a>
-                            </td>
-                            <td style="vertical-align: middle;">
-                                <a id="btnDeleteCategory"   href ="#" data-bind="visible:$root.selectedCategoryName() != 'Inbox',click: deleteCategory" class = "glyphicon glyphicon-trash btnCategory"></a>
+                                </button>
+                                <ul class="dropdown-menu" data-bind="foreach: repeaters">
+                                  <li><a href="#" data-bind="text:$data,click: $root.setRepeat"></a></li>
+                                </ul>
+                                <button  id="btnEditCategory"  data-bind="visible:$root.selectedCategoryName() != 'Inbox',click: editCategory"  class = "btn btn-primary glyphicon glyphicon-edit btnCategory"></button>
+                                <button  id="btnDeleteCategory"  data-bind="visible:$root.selectedCategoryName() != 'Inbox',click: deleteCategory" class = "btn btn-primary glyphicon glyphicon-trash btnCategory"></button>
+                            </span>
                             </td>
                         </tr>
                     </table>
