@@ -294,19 +294,25 @@ function TasksViewModel() {
     
 
     self.addTask = function(){
+        
         var taskElem = new todoTask(self.newTaskDescription(),new Date());
         self.newTaskDescription('');
         taskElem.categoryName = self.selectedCategoryName();
         
+            //self.tasks.unshift(taskElem);
+            //self.selectedCategory().taskCount(self.selectedCategory().taskCount()+1);
+        
 
-    	self.ajax(self.tasksURI, 'POST',taskElem).done(function(data) {
-    		if(data.id){
+        self.ajax(self.tasksURI, 'POST',taskElem).done(function(data) {
+                if(data.id){
                 taskElem.id=data.id;
                 self.tasks.unshift(taskElem);
                 self.selectedCategory().taskCount(self.selectedCategory().taskCount()+1);
-    		}
-    	});
+                }
+        });
+        console.info("New task '"+taskElem.description()+"' added.");
     }
+
     
     self.addSubtask = function(){
     	var subTaskElem = new todoTask(self.newSubtaskDescription(),new Date());
@@ -329,6 +335,7 @@ function TasksViewModel() {
     	.done(function(data){
     		categoryElement.id = data.id;
     		self.categories.push(categoryElement);
+                location.hash = categoryElement.name;
     		
     	});
     	
@@ -697,14 +704,16 @@ function TasksViewModel() {
     			return;
     		} 
     		self.removeCategory(self.selectedCategory());
-    		self.categories.remove(self.selectedCategory()); 
-    		self.gotoCategory(self.categories()[0])
     		
     	});
     }
     
     self.removeCategory = function(category){
-    	self.ajax(self.tasksURI+"/categoryDelete",'POST',category);
+    	self.ajax(self.tasksURI+"/categoryDelete",'POST',category).done(function(){
+            self.categories.remove(self.selectedCategory()); 
+            self.gotoCategory(self.categories()[0])
+        
+        });
     }
     
     self.noteFullScreen = function(){

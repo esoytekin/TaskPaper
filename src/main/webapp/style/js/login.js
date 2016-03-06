@@ -108,7 +108,7 @@ function LoginViewModel() {
 
 		window.localStorage.setItem("username",loginElement.username());
 		window.localStorage.setItem("password",loginElement.password());
-		location.href = "index.html";
+		location.href = "./#Inbox";
 	}
 	
 	self.signUpEvent = function(){

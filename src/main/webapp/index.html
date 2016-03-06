@@ -70,7 +70,7 @@
                 </div>
             </div>
             <div  class="col-md-12">
-                <form role="form" accept-charset="utf-8" data-bind="submit: addTask">
+                <form role="form" accept-charset="utf-8" data-bind="submit: addTask,attr: {action:'TaskPaper/#'+selectedCategoryName()} ">
                     <div class="form-group" >
                     <input type="TEXT" class="form-control"  id="txtNewTask" required data-bind="value:newTaskDescription, enterkey: sendTask, attr: {placeholder: 'Add an item to '+selectedCategoryName()} ">
                     </div>
@@ -98,7 +98,7 @@
                 <span data-bind="text: $root.selectedTask().description"></span>
             </div>
             <div>
-            <form role="form" accept-charset="utf-8" data-bind="submit: addSubtask">
+            <form role="form" accept-charset="utf-8" data-bind="submit: addSubtask,,attr: {action:'TaskPaper/#'+selectedCategoryName()} ">
                 <div class="form-group" >
                 <input type="TEXT" class="form-control"  required data-bind="value:newSubtaskDescription, attr: {placeholder: 'Add an item to ' + ( $root.selectedTask() ? $root.selectedTask().description() : '' )  }, disable: $root.selectedTask() && $root.selectedTask().done()">
                 </div>
