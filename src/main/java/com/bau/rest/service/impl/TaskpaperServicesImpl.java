@@ -90,9 +90,9 @@ public class TaskpaperServicesImpl implements TaskpaperServices{
 				case DAILY:
 					List<Task> tasks = getTasksByCategory(category);
 					for (Task task : tasks) {
-						Date completeDate = task.getCompleteDate();
-						if(completeDate.getTime()<c.getTimeInMillis()){
-							if(task.getDone()){
+						if(task.getDone()){
+							Date completeDate = task.getCompleteDate();
+							if(completeDate.getTime()<c.getTimeInMillis()){
 								task.setDone(false);
 								updateTask(task);
 							}
@@ -104,9 +104,9 @@ public class TaskpaperServicesImpl implements TaskpaperServices{
 					c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
 					tasks = getTasksByCategory(category);
 					for (Task task : tasks) {
-						Date completeDate = task.getCompleteDate();
-						if(completeDate.getTime()<c.getTimeInMillis()){
-							if(task.getDone()){
+						if(task.getDone()){
+							Date completeDate = task.getCompleteDate();
+							if(completeDate.getTime()<c.getTimeInMillis()){
 								task.setDone(false);
 								updateTask(task);
 							}
