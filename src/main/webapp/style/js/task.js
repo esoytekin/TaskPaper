@@ -255,14 +255,19 @@ function TasksViewModel() {
     }
 
     self.getTasks = function(categoryId){
+    	self.tasks([]);
+    	self.completeTasks([]);
+    	if(self.selectedCategory()){
+    		var taskCount = self.selectedCategory().taskCount();
+    		if(!taskCount || taskCount == 0)
+    			return;
+    	}
     	console.log("getting tasks for categoryId: " + categoryId);
     	var preservedHtml = $("#task-container").html();
     	$("#task-container").fadeOut();
     	$(".loader").slideDown();
     	self.ajax(self.tasksURI+"/getByCategory/"+categoryId, 'GET').done(function(data) {
     		
-    		self.tasks([]);
-    		self.completeTasks([]);
 
     		for(var i = 0; i<data.length; i++){
     			var taskElem = new todoTask(data[i].description,new Date(data[i].date));
@@ -788,7 +793,6 @@ function TasksViewModel() {
               var categoryName = this.params.category;
     		
               self.selectedCategoryName(categoryName);
-              self.getTasks(categoryName);
               self.selectedTask('');
 
               if(self.categories().length == 0){
@@ -799,6 +803,7 @@ function TasksViewModel() {
     			self.selectedCategory(self.getCategoryByName(self.categories(), categoryName));
             	  
               }
+              self.getTasks(categoryName);
               $("#completedSlider").slideUp();
             	  
     	});
