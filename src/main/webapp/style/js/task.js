@@ -27,13 +27,20 @@ ko.bindingHandlers.fadeVisible = {
 		update: function(element, valueAccessor){
 			var shouldDisplay = valueAccessor();
 			shouldDisplay ? $(element).fadeIn() : $(element).hide();
-//			if(shouldDisplay){
-//				setTimeout(function(){
-//					$(element).fadeIn()
-//				},500);
-//			}else{
-//				$(element).hide()
-//			}
+		}
+};
+ko.bindingHandlers.fadeVisibleDelay = {
+		
+		init: function(element, valueAccessor){},
+		update: function(element, valueAccessor){
+			var shouldDisplay = valueAccessor();
+			if(shouldDisplay){
+				setTimeout(function(){
+					$(element).fadeIn()
+				},500);
+			}else{
+				$(element).hide()
+			}
 		}
 };
 
