@@ -25,8 +25,14 @@
         	<property name="realmName" value="REALM"></property>
         </bean>
         
+        <bean id="encoder" 
+                class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+          <constructor-arg name="strength" value="11" />
+        </bean>
+        
         <security:authentication-manager alias="authenticationManager">
         	<security:authentication-provider>
+        		<security:password-encoder ref="encoder" />
         		<security:jdbc-user-service data-source-ref="dataSource"
         		users-by-username-query="select username,password,enabled from C_USER where username=?"
         		authorities-by-username-query="select username,role from C_USER_ROLE where username=? "/>

@@ -3,6 +3,7 @@ package com.bau.rest;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +31,9 @@ public class LoginRest {
 		user.setName(signElement.getLgFirstName());
 		user.setSurname(signElement.getLgLastName());
 		user.setUsername(signElement.getLgUsername());
-		user.setPassword(signElement.getLgPassword());
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String hashedPassword = passwordEncoder.encode(signElement.getLgPassword());
+		user.setPassword(hashedPassword);
 		user.setEmail(signElement.getLgEmail());
 		user.setDate(new Date());
 		user.setEnabled(true);
