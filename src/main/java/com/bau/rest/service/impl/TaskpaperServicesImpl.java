@@ -42,7 +42,7 @@ public class TaskpaperServicesImpl implements TaskpaperServices{
 	private UserRoleDAO userRoleDAO;
 	
 	Logger logger = Logger.getLogger(TaskpaperServicesImpl.class);
-	
+	private User user = null;
 	private static final String INBOX = "Inbox";
 	
 	@SuppressWarnings("unused")
@@ -62,7 +62,10 @@ public class TaskpaperServicesImpl implements TaskpaperServices{
 	@Override
 	public User getUser(){
 		
-		return userDAO.getByUsername(getUsername());
+		if(this.user == null){
+			user = userDAO.getByUsername(getUsername());
+		}
+		return  user;
 	}
 
 	@Override
@@ -79,43 +82,45 @@ public class TaskpaperServicesImpl implements TaskpaperServices{
 	public List<Category> getCategoriesByUser() {
 		logger.debug("Retrieving categories for user..");
 		List<Category> categories =  categoryDAO.getListByUser(getUser());
-		if(categories.size() == 0){
+		Category inboxCategory = null;
+		//search inbox in array
+		if (categories.size()>0) {
+			for (Category category : categories) {
+				if(category.getName().equals(INBOX)){
+					inboxCategory = category;
+				}
+				//set category task count
+				long taskCount = taskDAO.getTaskCountByCategory(category);
+				category.setTaskCount(taskCount);
+
+				//check for completed repeated tasks
+				if(category.getRepeater() != null){
+					checkForRepeaters(category);
+				}
+			}
+		}
+		if(inboxCategory == null){
 			logger.info("Couldn't find any category. Creating Inbox...");
-			categories.add(createAndGetFirstCategory());
+			inboxCategory = createAndGetFirstCategory();
+			inboxCategory.setTaskCount(0l);
+			categories.add(inboxCategory);
 		}
 		
 		if(!categories.get(0).getName().equals(INBOX)){
 			logger.debug("Need to reorder categories...");
 			
-			reOrderCategories(categories);
+			reOrderCategories(categories,inboxCategory);
 			
 		}
 
-		for (Category category : categories) {
-			//set category task count
-			long taskCount = taskDAO.getTaskCountByCategory(category);
-			category.setTaskCount(taskCount);
-			
-			//check for completed repeated tasks
-			if(category.getRepeater() != null){
-				checkForRepeaters(category);
-			}
-		}
 		return categories;
 	}
 
-	private void reOrderCategories(List<Category> categories) {
-		Category inbox = null;
-		for (int i = 0; i < categories.size(); i++) {
-			Category cat = categories.get(i);
-			if(cat.getName().equals(INBOX)){
-				inbox = categories.remove(i);
-				break;
-			}
-		}
+	private void reOrderCategories(List<Category> categories,Category inboxCategory) {
+		categories.remove(inboxCategory);
 		
 		List<Category> newCategories = new ArrayList<Category>();
-		newCategories.add(inbox);
+		newCategories.add(inboxCategory);
 		newCategories.addAll(categories);
 		
 		categories.clear();

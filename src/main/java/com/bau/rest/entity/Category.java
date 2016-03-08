@@ -108,5 +108,13 @@ public class Category {
 	public void setRepeater(Repeater repeater) {
 		this.repeater = repeater;
 	}
+
+	@Override
+	public String toString() {
+		return "Category [name=" + name + ", enabled=" + enabled
+				+ ", repeater=" + repeater + "]";
+	}
+	
+	
 	
 }

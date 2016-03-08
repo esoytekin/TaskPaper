@@ -26,14 +26,14 @@ ko.bindingHandlers.fadeVisible = {
 		init: function(element, valueAccessor){},
 		update: function(element, valueAccessor){
 			var shouldDisplay = valueAccessor();
-//			shouldDisplay ? $(element).fadeIn() : $(element).hide();
-			if(shouldDisplay){
-				setTimeout(function(){
-					$(element).fadeIn()
-				},500);
-			}else{
-				$(element).hide()
-			}
+			shouldDisplay ? $(element).fadeIn() : $(element).hide();
+//			if(shouldDisplay){
+//				setTimeout(function(){
+//					$(element).fadeIn()
+//				},500);
+//			}else{
+//				$(element).hide()
+//			}
 		}
 };
 
@@ -248,6 +248,10 @@ function TasksViewModel() {
     }
 
     self.getTasks = function(categoryId){
+    	console.log("getting tasks for categoryId: " + categoryId);
+    	var preservedHtml = $("#task-container").html();
+    	$("#task-container").fadeOut();
+    	$(".loader").slideDown();
     	self.ajax(self.tasksURI+"/getByCategory/"+categoryId, 'GET').done(function(data) {
     		
     		self.tasks([]);
@@ -268,6 +272,10 @@ function TasksViewModel() {
     			}
 
     		}
+
+    		console.log("fetching tasks completed...");
+    		$("#task-container").fadeIn();
+    		$(".loader").slideUp();
     	});
     	
     }
@@ -284,7 +292,7 @@ function TasksViewModel() {
     	self.ajax(self.tasksURI+"/getCategories",'GET').done(function(data){
     		self.categories([]);
     		var cat;
-                var selectedCatIndex;
+    		var selectedCatIndex;
     		for(var i = 0; i<data.length; i++){
     			cat = new todoCategory(data[i].name, new Date(data[i].date));
     			cat.taskCount(data[i].taskCount);
@@ -293,19 +301,19 @@ function TasksViewModel() {
     			cat.repeater(data[i].repeater);
 
     			self.categories.push(cat);
-                        if(self.selectedCategoryName()){
-                              if(self.selectedCategoryName() == cat.name){
-                                    selectedCatIndex = i;
-                              }
-                            
-                        }
+    			if(self.selectedCategoryName()){
+    				if(self.selectedCategoryName() == cat.name){
+    					selectedCatIndex = i;
+    				}
+
+    			}
     		}
     		if (!self.selectedCategoryName()){
     			self.gotoCategory(self.categories()[0]);
     		} else {
     			self.gotoCategory(self.categories()[selectedCatIndex]);
-                
-                }
+
+    		}
     	});
     }
     
@@ -752,6 +760,21 @@ function TasksViewModel() {
     		}
     	}
     }
+    
+    self.getCategoryByName = function(categories,name) {
+    	
+    	if(!categories && categories.length == 0)
+    	{
+    		return undefined;
+    	}
+    	for(var i = 0; i<categories.length; i++){
+    		var tempCat = categories[i];
+    		if(tempCat.name === name){
+    			return tempCat;
+    		}
+    	}
+
+    }
 
     Sammy(function(){
     	this.get("#:category",function(){
@@ -761,7 +784,14 @@ function TasksViewModel() {
               self.getTasks(categoryName);
               self.selectedTask('');
 
-              self.getCategories();
+              if(self.categories().length == 0){
+            	  
+            	  self.getCategories();
+              }else {
+            	  
+    			self.selectedCategory(self.getCategoryByName(self.categories(), categoryName));
+            	  
+              }
               $("#completedSlider").slideUp();
             	  
     	});
