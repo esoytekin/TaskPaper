@@ -7,6 +7,20 @@
 //  }
 //);
 
+$(function(){
+	
+	$("#banner").click(function(){
+		
+		location.hash="#Inbox";
+	});
+	
+	$(".showCompleted").click(function(){
+		
+		$("#completedSlider").slideToggle();
+	});
+	
+});
+
 ko.bindingHandlers.fadeVisible = {
 		
 		init: function(element, valueAccessor){},
@@ -191,7 +205,6 @@ function TasksViewModel() {
     self.selectedTask = ko.observable('');
     self.selectedNote= ko.observable('');
     self.showCompleted = ko.observable(false);
-    self.asyncCompleted = false;
     self.handleError = function(jqXHR){
          console.log("ajax error " + jqXHR.status);
 //         for(var props in jqXHR){
@@ -211,7 +224,7 @@ function TasksViewModel() {
          }
     }
     self.ajax = function(uri, method, data) {
-        progressBar.open();
+//        progressBar.open();
         var request = {
             url: uri,
             type: method,
@@ -228,7 +241,7 @@ function TasksViewModel() {
                 self.handleError(jqXHR);
             },
             complete: function(){
-            	progressBar.close();
+//            	progressBar.close();
             }
         };
         return $.ajax(request);
@@ -265,17 +278,13 @@ function TasksViewModel() {
 
       self.selectedCategory(category);
       location.hash = category.name;
-
-//      self.selectedCategoryName(category.name);
-//      self.getTasks(category.name);
-//      self.selectedTask('');
     };
     
     self.getCategories = function(){
-    	self.asyncCompleted = false;
     	self.ajax(self.tasksURI+"/getCategories",'GET').done(function(data){
     		self.categories([]);
     		var cat;
+                var selectedCatIndex;
     		for(var i = 0; i<data.length; i++){
     			cat = new todoCategory(data[i].name, new Date(data[i].date));
     			cat.taskCount(data[i].taskCount);
@@ -284,11 +293,19 @@ function TasksViewModel() {
     			cat.repeater(data[i].repeater);
 
     			self.categories.push(cat);
+                        if(self.selectedCategoryName()){
+                              if(self.selectedCategoryName() == cat.name){
+                                    selectedCatIndex = i;
+                              }
+                            
+                        }
     		}
     		if (!self.selectedCategoryName()){
     			self.gotoCategory(self.categories()[0]);
-    		}
-    		self.asyncCompleted = true;
+    		} else {
+    			self.gotoCategory(self.categories()[selectedCatIndex]);
+                
+                }
     	});
     }
     
@@ -305,9 +322,9 @@ function TasksViewModel() {
 
         self.ajax(self.tasksURI, 'POST',taskElem).done(function(data) {
                 if(data.id){
-                taskElem.id=data.id;
-                self.tasks.unshift(taskElem);
-                self.selectedCategory().taskCount(self.selectedCategory().taskCount()+1);
+                    taskElem.id=data.id;
+                    self.tasks.unshift(taskElem);
+                    self.selectedCategory().taskCount(self.selectedCategory().taskCount()+1);
                 }
         });
         console.info("New task '"+taskElem.description()+"' added.");
@@ -547,7 +564,7 @@ function TasksViewModel() {
     BootstrapDialog.DEFAULT_TEXTS['CANCEL'] = 'Cancel';
     BootstrapDialog.DEFAULT_TEXTS['CONFIRM'] = 'Confirmation';
     
-    self.getCategories();
+    //self.getCategories();
 
     self.ratingClick = function(){
     	var elem = this;
@@ -738,33 +755,23 @@ function TasksViewModel() {
 
     Sammy(function(){
     	this.get("#:category",function(){
-    		var categoryName = this.params.category;
+              var categoryName = this.params.category;
     		
               self.selectedCategoryName(categoryName);
               self.getTasks(categoryName);
               self.selectedTask('');
-              self.getCategories();
-              if(!self.asyncCompleted)
-              {
-            	  setTimeout(function(){
-            		  if(self.asyncCompleted){
-            			  for (var int = 0; int < self.categories().length; int++) {
-            				  var cat = self.categories()[int];
-            				  if(categoryName == cat.name){
-            					  self.gotoCategory(cat);
-            					  break;
-            				  }
-            			  }
-            		  }
-            		  
-            	  },1000);
 
-            	  
-              }
-//              while (!self.asyncCompleted){
-//              }
+              self.getCategories();
+              $("#completedSlider").slideUp();
             	  
     	});
+    	
+    	this.notFound = function (){
+    		
+    		console.log("couldn't find category...");
+    		location.hash="#Inbox"
+    	}
+
     }).run();
     
 }

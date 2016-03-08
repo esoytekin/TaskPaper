@@ -1,9 +1,11 @@
 package com.bau.rest.service.impl;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,6 +41,10 @@ public class TaskpaperServicesImpl implements TaskpaperServices{
 	@Autowired
 	private UserRoleDAO userRoleDAO;
 	
+	Logger logger = Logger.getLogger(TaskpaperServicesImpl.class);
+	
+	private static final String INBOX = "Inbox";
+	
 	@SuppressWarnings("unused")
 	private String getUserRoles(){
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -71,79 +77,118 @@ public class TaskpaperServicesImpl implements TaskpaperServices{
 	
 	@Override
 	public List<Category> getCategoriesByUser() {
+		logger.debug("Retrieving categories for user..");
 		List<Category> categories =  categoryDAO.getListByUser(getUser());
 		if(categories.size() == 0){
+			logger.info("Couldn't find any category. Creating Inbox...");
 			categories.add(createAndGetFirstCategory());
 		}
+		
+		if(!categories.get(0).getName().equals(INBOX)){
+			logger.debug("Need to reorder categories...");
+			
+			reOrderCategories(categories);
+			
+		}
+
 		for (Category category : categories) {
+			//set category task count
 			long taskCount = taskDAO.getTaskCountByCategory(category);
 			category.setTaskCount(taskCount);
 			
+			//check for completed repeated tasks
 			if(category.getRepeater() != null){
-				Calendar c = Calendar.getInstance();
-				c.set(Calendar.HOUR, 0);
-				c.set(Calendar.MINUTE, 0);
-				c.set(Calendar.SECOND, 0);
-				switch (category.getRepeater()) {
-				case NO_REPEAT:
-					break;
-				case DAILY:
-					List<Task> tasks = getTasksByCategory(category);
-					for (Task task : tasks) {
-						if(task.getDone()){
-							Date completeDate = task.getCompleteDate();
-							if(completeDate.getTime()<c.getTimeInMillis()){
-								task.setDone(false);
-								updateTask(task);
-							}
-						}
-					}
-					
-					break;
-				case WEEKLY:
-					c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-					tasks = getTasksByCategory(category);
-					for (Task task : tasks) {
-						if(task.getDone()){
-							Date completeDate = task.getCompleteDate();
-							if(completeDate.getTime()<c.getTimeInMillis()){
-								task.setDone(false);
-								updateTask(task);
-							}
-						}
-					}
-					
-					break;
-				case MONTHLY:
-					c.set(Calendar.DAY_OF_MONTH, 1);
-					tasks = getTasksByCategory(category);
-					for (Task task : tasks) {
-						if(task.getDone()){
-							Date completeDate = task.getCompleteDate();
-							if(completeDate.getTime()<c.getTimeInMillis()){
-								task.setDone(false);
-								task.setCompleteDate(null);
-								updateTask(task);
-							}
-						}
-					}
-					
-					break;
-				default:
-					break;
-				}
+				checkForRepeaters(category);
 			}
 		}
 		return categories;
 	}
-	
+
+	private void reOrderCategories(List<Category> categories) {
+		Category inbox = null;
+		for (int i = 0; i < categories.size(); i++) {
+			Category cat = categories.get(i);
+			if(cat.getName().equals(INBOX)){
+				inbox = categories.remove(i);
+				break;
+			}
+		}
+		
+		List<Category> newCategories = new ArrayList<Category>();
+		newCategories.add(inbox);
+		newCategories.addAll(categories);
+		
+		categories.clear();
+		categories.addAll(newCategories);
+	}
+
+	private void checkForRepeaters(Category category) {
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.HOUR, 0);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		logger.debug("Checking for repeaters...");
+		switch (category.getRepeater()) {
+		case NO_REPEAT:
+			break;
+		case DAILY:
+			List<Task> tasks = getTasksByCategory(category);
+			for (Task task : tasks) {
+				if(task.getDone()){
+					Date completeDate = task.getCompleteDate();
+					if(completeDate.getTime()<c.getTimeInMillis()){
+						logger.debug("Task is completed and Daily task. now reseting status...");
+						task.setDone(false);
+						updateTask(task);
+					}
+				}
+			}
+			
+			break;
+		case WEEKLY:
+			c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+			tasks = getTasksByCategory(category);
+			for (Task task : tasks) {
+				if(task.getDone()){
+					Date completeDate = task.getCompleteDate();
+					if(completeDate.getTime()<c.getTimeInMillis()){
+						logger.debug("Task is completed and Weekly task. now reseting status...");
+						task.setDone(false);
+						updateTask(task);
+					}
+				}
+			}
+			
+			break;
+		case MONTHLY:
+			c.set(Calendar.DAY_OF_MONTH, 1);
+			tasks = getTasksByCategory(category);
+			for (Task task : tasks) {
+				if(task.getDone()){
+					Date completeDate = task.getCompleteDate();
+					if(completeDate.getTime()<c.getTimeInMillis()){
+						logger.debug("Task is completed and Monthly task. now reseting status...");
+						task.setDone(false);
+						task.setCompleteDate(null);
+						updateTask(task);
+					}
+				}
+			}
+			
+			break;
+		default:
+			break;
+		}
+	}
+
 	private Category createAndGetFirstCategory(){
 			Category c = new Category();
 			c.setUser(getUser());
 			c.setDate(new Date());
 			c.setEnabled(true);
-			c.setName("Inbox");
+			c.setName(INBOX);
 			categoryDAO.save(c);
+			logger.debug("Created inbox category...");
 			return c;
 		
 	}

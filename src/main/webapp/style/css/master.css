@@ -36,11 +36,12 @@
 }
 
 #body {
-/* 	background-color: #f7fbfe; */
-    background-color: #ffffff;
+	background-color: #cccccc;
 	border-radius: 5px;
 	margin: 0 auto;
-	padding: 10px 0px;
+
+	padding: 20px 20px;
+
 }
 
 .thin-shadowed {
@@ -57,7 +58,7 @@
 
 .showCompleted{
 	background-color: lightblue;
-    color: white;
+    color: #000000;
     display: block;
     margin-bottom: 5px;
     padding: 5px;
