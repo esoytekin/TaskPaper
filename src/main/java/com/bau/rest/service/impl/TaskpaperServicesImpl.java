@@ -62,7 +62,7 @@ public class TaskpaperServicesImpl implements TaskpaperServices{
 	@Override
 	public User getUser(){
 		
-		if(this.user == null){
+		if(this.user == null || !this.user.getUsername().equals(getUsername())){
 			user = userDAO.getByUsername(getUsername());
 		}
 		return  user;
