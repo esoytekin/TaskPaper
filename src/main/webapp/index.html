@@ -86,7 +86,7 @@
             <br/>
             <div class = "loader"></div>
             <div id="task-container" class="col-md-12">
-                <table class="table table-striped table-hover" >
+                <table class="table table-hover" >
                     <tbody data-bind="template: {name: 'task-template', foreach: tasks }, fadeVisible: tasks().length>0"></tbody>
                 </table>
 <!--                 
@@ -94,7 +94,7 @@
  -->
                 <a class="showCompleted" href="javascript://" data-bind="click: toggleCompleted, fadeVisible: completeTasks().length>0"><span>Completed Items</span><span class="badge" style="margin-left: 10px;" data-bind="text: completeTasks().length" ></span></a>
 				<div id="completedSlider" style="display:none;" >
-                <table class="table table-striped table-hover" >
+                <table class="table  table-hover" >
                     <tbody data-bind="template: {name: 'task-template', foreach: completeTasks } "></tbody>
                 </table>
                 </div>
@@ -113,7 +113,7 @@
             </form>
             </div>
             <div id="sub-task-container" >
-                <table class="table table-striped table-hover" >
+                <table class="table  table-hover" >
                 	<tbody data-bind="template: {name: 'subtask-template', foreach: subtasks}"></tbody>
                 	<tbody data-bind="template: {name: 'subtask-template', foreach: completeSubtasks}"></tbody>
                 </table>
@@ -141,7 +141,7 @@
     
     <script type="text/html" id="task-template">
 
-            <tr data-bind="css: done() ? 'success' : favorite() ? 'danger' : ''" class="task">
+            <tr data-bind="css: done() ? 'success' : favorite() ? 'danger' : '', css: description == $root.selectedTask().description ? 'active' : ''" class="task" >
                 <td style="width: 1%;" ><input type="CHECKBOX" data-bind="checked: done, click: $root.checkDone"/></td>
                 <td ><a href="javascript://"  data-bind="click: $root.taskClick"><span data-bind="text: description" class="taskDesc"></span></a></td>
                 <td style="width: 1%; vertical-align: middle"><span class="badge"  data-bind="text:subTaskCount()>0 ? subTaskCount : ''"></span></td>
