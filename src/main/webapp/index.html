@@ -141,7 +141,7 @@
     
     <script type="text/html" id="task-template">
 
-            <tr data-bind="css: done() ? 'success' : favorite() ? 'danger' : '', css: description == $root.selectedTask().description ? 'active' : ''" class="task" >
+        <tr data-bind="css: { success: done(), danger: favorite(), active: description == $root.selectedTask().description }" class="task" >
                 <td style="width: 1%;" ><input type="CHECKBOX" data-bind="checked: done, click: $root.checkDone"/></td>
                 <td ><a href="javascript://"  data-bind="click: $root.taskClick"><span data-bind="text: description" class="taskDesc"></span></a></td>
                 <td style="width: 1%; vertical-align: middle"><span class="badge"  data-bind="text:subTaskCount()>0 ? subTaskCount : ''"></span></td>
@@ -161,7 +161,7 @@
 	</script>
 	
 	<script type="text/html" id="subtask-template">
-            <tr data-bind="css: done() ? 'success' : favorite() ? 'danger' : ''" >
+            <tr data-bind="css: { success :  done(), danger: favorite() }" >
                 <td style="width: 1%"><input type="CHECKBOX" data-bind="checked: done, click: $root.checkSubtaskDone"/></td>
                 <td data-bind="text: description"></td>
                 <td style="width: 1%">

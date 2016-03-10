@@ -62,7 +62,7 @@ public class TaskHibernateDAO implements TaskDAO {
 		Criteria criteria = getCurrentSession().createCriteria(Task.class);
 		criteria.add(Restrictions.eq("category", entity));
 		criteria.addOrder(Order.desc("favorite"));
-		criteria.addOrder(Order.desc("date"));
+		criteria.addOrder(Order.asc("date"));
 		return criteria.list();
 	}
 	
