@@ -9,10 +9,6 @@
 
 $(function(){
 	
-	$("#banner").click(function(){
-		
-		location.hash="#Inbox";
-	});
 	
 	$(".showCompleted").click(function(){
 		

@@ -27,7 +27,7 @@
     <div class = "container">
     <div class="navbar navbar-default navbar-fixed-top thin-shadowed">
             <div class="navbar-header">
-                <a class="navbar-brand" href="javascript://" id="banner" >T A S K P A P E R</a> 
+                <a class="navbar-brand" href="#Inbox" >T A S K P A P E R</a> 
             </div> 
 
     </div>
@@ -35,7 +35,7 @@
     <div class="well col-md-3" style="display:block;">
         <ul class = "nav nav-pills nav-stacked" data-bind="foreach: categories">
             <li data-bind="css: {active: name == $root.selectedCategoryName()}"> 
-              <a  href="javascript://" data-bind="click: $root.gotoCategory"><span data-bind="text: name"></span><span class="badge" style="float:right;" data-bind="text:taskCount()==0 ? '' : taskCount"></span></a>
+              <a  data-bind=" attr: {href:'#'+name}"><span data-bind="text: name"></span><span class="badge" style="float:right;" data-bind="text:taskCount()==0 ? '' : taskCount"></span></a>
             </li>
         </ul>
 
