@@ -74,5 +74,15 @@ public class TaskHibernateDAO implements TaskDAO {
 		criteria.setProjection(Projections.rowCount());
 		return (Long)criteria.uniqueResult();
 	}
+	
+	@Override
+	public long getCompletedTaskCountByCategory(Category entity) {
+		Criteria criteria = getCurrentSession().createCriteria(Task.class);
+		criteria.add(Restrictions.eq("category", entity));
+		criteria.add(Restrictions.eq("done", Boolean.TRUE));
+		criteria.setProjection(Projections.rowCount());
+		return (Long)criteria.uniqueResult();
+	}
+	
 
 }

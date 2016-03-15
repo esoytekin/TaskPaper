@@ -143,21 +143,27 @@ var Repeater = function (name,id){
 	self.id = id;
 }
 
-var todoCategory = function(categoryName,rawDate){
+var todoCategory = function(data){
 	var self = this;
-	self.name = categoryName;
-	self.rawDate = rawDate;
-	self.taskCount=ko.observable();
-	self.enabled = true;
+	self.name = data.name;
+	self.rawDate = new Date(data.date);
+	self.taskCount=ko.observable(data.taskCount);
+	self.completedTaskCount=ko.observable(data.completedTaskCount);
+	self.enabled = data.enabled;
+    self.repeater = ko.observable(data.repeater);
     self.date = ko.computed(function(){
-        var day = rawDate.getDate();
-        var month = rawDate.getMonth()+1;
-        var year = rawDate.getFullYear();
+        var day = self.rawDate.getDate();
+        var month = self.rawDate.getMonth()+1;
+        var year = self.rawDate.getFullYear();
         var dateFull = month + '/' + day + '/' + year;
         return dateFull;
     });
     
-    self.repeater = ko.observable();
+    self.totalTaskCount = ko.computed(function(){
+    	return self.taskCount()+self.completedTaskCount();
+    	
+    });
+    
 
 	
 }
@@ -254,7 +260,7 @@ function TasksViewModel() {
     	self.tasks([]);
     	self.completeTasks([]);
     	if(self.selectedCategory()){
-    		var taskCount = self.selectedCategory().taskCount();
+    		var taskCount = self.selectedCategory().totalTaskCount();
     		if(!taskCount || taskCount == 0)
     			return;
     	}
@@ -302,11 +308,7 @@ function TasksViewModel() {
     		var cat;
     		var selectedCatIndex;
     		for(var i = 0; i<data.length; i++){
-    			cat = new todoCategory(data[i].name, new Date(data[i].date));
-    			cat.taskCount(data[i].taskCount);
-    			cat.enabled= data[i].enabled;
-    			cat.id=data[i].id;
-    			cat.repeater(data[i].repeater);
+    			cat = new todoCategory(data[i]);
 
     			self.categories.push(cat);
     			if(self.selectedCategoryName()){
@@ -386,6 +388,7 @@ function TasksViewModel() {
     			self.ajax(self.tasksURI+"/delete", 'POST',taskElem).done(function(data) { 
     				if(taskElem.done()){
     					self.completeTasks.remove(taskElem);
+    					self.selectedCategory().completedTaskCount(self.selectedCategory().completedTaskCount()-1);
     				}else{
     					self.tasks.remove(taskElem); 
     					self.selectedCategory().taskCount(self.selectedCategory().taskCount()-1);
@@ -411,11 +414,13 @@ function TasksViewModel() {
     		self.tasks.remove(taskElem);
     		customPush(taskElem, self.completeTasks); 
     		self.selectedCategory().taskCount(self.selectedCategory().taskCount()-1);
+    		self.selectedCategory().completedTaskCount(self.selectedCategory().completedTaskCount()+1);
     	}else{
 
     		self.completeTasks.remove(taskElem);
     		customPush(taskElem, self.tasks);
     		self.selectedCategory().taskCount(self.selectedCategory().taskCount()+1);
+    		self.selectedCategory().completedTaskCount(self.selectedCategory().completedTaskCount()-1);
     		
     	} 
     	self.ajax(self.tasksURI+"/complete", 'POST',taskElem).done(function(data) {

@@ -51,6 +51,9 @@ public class Category {
 	
 	@Transient
 	private Long taskCount;
+	
+	@Transient
+	private Long completedTaskCount;
 
 	public Long getId() {
 		return id;
@@ -98,6 +101,14 @@ public class Category {
 	
 	public void setTaskCount(Long taskCount) {
 		this.taskCount = taskCount;
+	}
+	
+	public Long getCompletedTaskCount() {
+		return completedTaskCount;
+	}
+	
+	public void setCompletedTaskCount(Long completedTaskCount) {
+		this.completedTaskCount = completedTaskCount;
 	}
 	
 	public Repeater getRepeater() {

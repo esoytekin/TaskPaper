@@ -92,6 +92,9 @@ public class TaskpaperServicesImpl implements TaskpaperServices{
 				//set category task count
 				long taskCount = taskDAO.getTaskCountByCategory(category);
 				category.setTaskCount(taskCount);
+				
+				long completedTaskCount = taskDAO.getCompletedTaskCountByCategory(category);
+				category.setCompletedTaskCount(completedTaskCount);
 
 				//check for completed repeated tasks
 				if(category.getRepeater() != null){
