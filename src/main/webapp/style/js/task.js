@@ -145,6 +145,7 @@ var Repeater = function (name,id){
 
 var todoCategory = function(data){
 	var self = this;
+	self.id = data.id;
 	self.name = data.name;
 	self.rawDate = new Date(data.date);
 	self.taskCount=ko.observable(data.taskCount);
