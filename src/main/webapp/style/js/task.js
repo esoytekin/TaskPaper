@@ -10,12 +10,31 @@
 $(function(){
 	
 	
+    ko.applyBindings(new TasksViewModel());
 	$(".showCompleted").click(function(){
 		
 		$("#completedSlider").slideToggle();
 	});
 	
 });
+
+ko.bindingHandlers.preventBubble = {
+        init: function (element, valueAccessor) {
+            var eventName = ko.utils.unwrapObservable(valueAccessor());
+            var arr = eventName;
+            if (!eventName.pop) {
+                arr = [arr];
+            }
+            for (var p in arr) {
+                ko.utils.registerEventHandler(element, arr[p], function (event) {
+                    event.cancelBubble = true;
+                    if (event.stopPropagation) {
+                        event.stopPropagation();
+                    }
+                });
+            }
+        }
+    };
 
 ko.bindingHandlers.fadeVisible = {
 		
@@ -821,5 +840,4 @@ function TasksViewModel() {
     }).run();
     
 }
-ko.applyBindings(new TasksViewModel());
 
