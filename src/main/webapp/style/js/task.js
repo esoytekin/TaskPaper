@@ -271,7 +271,6 @@ function TasksViewModel() {
     	$(".loader").slideDown();
     	self.ajax(self.tasksURI+"/getByCategory/"+categoryId, 'GET').done(function(data) {
     		
-
     		for(var i = 0; i<data.length; i++){
     			var taskElem = new todoTask(data[i].description,new Date(data[i].date));
     			taskElem.id = data[i].id;
@@ -365,11 +364,14 @@ function TasksViewModel() {
     }
     
     self.addCategory = function(){
-    	var categoryElement = new todoCategory(self.newCategoryName(), new Date());
+    	var categoryElement={name: self.newCategoryName(), rawDate:new Date()};// = new todoCategory(self.newCategoryName(), new Date());
+//    	categoryElement.name = self.newCategoryName();
+//    	categoryElement.rawDate=new Date();
     	self.newCategoryName("");
     	self.ajax(self.tasksURI+"/category",'POST',categoryElement)
     	.done(function(data){
-    		categoryElement.id = data.id;
+    		categoryElement = new todoCategory(data);
+//    		categoryElement.id = data.id;
     		self.categories.push(categoryElement);
                 location.hash = categoryElement.name;
     		
