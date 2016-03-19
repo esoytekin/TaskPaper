@@ -150,6 +150,7 @@
           <div class="input-group">
           <input  type="CHECKBOX" data-bind="checked: done, click: $root.checkDone, preventBubble: ['click']"/>
           <span data-bind="text:description" style="padding-left: 10px"></span>
+          <span class="badge" style="margin-left:12px"  data-bind="text:subTaskCount()>0 ? subTaskCount : ''"></span>
           <span class="input-group-btn">
                 <button class="glyphicon btn btn-default" data-bind="visible:done()===false,click: $root.ratingClick, enabled: done===false,preventBubble: ['click']">
                 <div class="rating" >
