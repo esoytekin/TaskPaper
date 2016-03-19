@@ -107,7 +107,7 @@
             </div>
         </div>
     </div>
-    <div class="container-fluid col-md-3"  data-bind="fadeVisibleDelay: $root.selectedTask()" >
+    <div class="well col-md-3"  data-bind="fadeVisibleDelay: $root.selectedTask()" >
             <div class="alert " role="alert" data-bind="css: $root.selectedTask() &&  ($root.selectedTask().done() ? 'alert-success' : $root.selectedTask().favorite() ? 'alert-danger' : 'alert-info')" >
                 <span data-bind="text: $root.selectedTask().description"></span>
             </div>
