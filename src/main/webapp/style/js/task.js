@@ -52,7 +52,7 @@ ko.bindingHandlers.fadeVisibleDelay = {
 			if(shouldDisplay){
 				setTimeout(function(){
 					$(element).fadeIn()
-				},500);
+				},700);
 			}else{
 				$(element).hide()
 			}
