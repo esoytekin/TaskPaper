@@ -412,9 +412,10 @@ function TasksViewModel() {
     }
     
     self.addCategory = function(){
-    	var categoryElement={name: self.newCategoryName(), rawDate:new Date()};// = new todoCategory(self.newCategoryName(), new Date());
-//    	categoryElement.name = self.newCategoryName();
-//    	categoryElement.rawDate=new Date();
+    	var size = self.categories().length;
+    	var pos = self.categories()[size-1].order;
+    	pos = pos+1
+    	var categoryElement={name: self.newCategoryName(), rawDate:new Date(), order: pos};// = new todoCategory(self.newCategoryName(), new Date());
     	self.newCategoryName("");
     	self.ajax(self.tasksURI+"/category",'POST',categoryElement)
     	.done(function(data){
@@ -800,6 +801,13 @@ function TasksViewModel() {
     self.removeCategory = function(category){
     	self.ajax(self.tasksURI+"/categoryDelete",'POST',category).done(function(){
             self.categories.remove(self.selectedCategory()); 
+            for(var x = 0; x<self.categories().length;x++){
+            	var categoryItem = self.categories()[x];
+            	categoryItem.order=x;
+            	self.ajax(self.tasksURI+"/categoryUpdate",'POST',categoryItem).done(function(){
+            	});
+            	
+            }
             self.gotoCategory(self.categories()[0])
         
         });

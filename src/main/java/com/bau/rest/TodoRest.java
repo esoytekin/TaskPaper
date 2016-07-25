@@ -85,11 +85,12 @@ public class TodoRest {
 	
 	@RequestMapping(value="/category",method=RequestMethod.POST)
 	@ResponseBody
-	public Category addCategory(@RequestParam String name){
+	public Category addCategory(@RequestParam String name, @RequestParam int order){
 		Category c = new Category();
 		c.setName(name);
 		c.setDate(new Date());
 		c.setEnabled(true);
+		c.setOrder(order);
 		c.setUser(taskPaperServices.getUser());
 		taskPaperServices.saveCategory(c);
 		return c;
