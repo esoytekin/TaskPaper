@@ -11,12 +11,48 @@ $(function(){
 	
 	
     ko.applyBindings(new TasksViewModel());
-	$(".showCompleted").click(function(){
-		
-		$("#completedSlider").slideToggle();
-	});
-	
+    $(".showCompleted").click(function(){
+    	$("#completedSlider").slideToggle();
+    });
+
 });
+
+ko.bindingHandlers.sortableList = {
+	    init: function(element, valueAccessor,allBindingAccessor,viewModel) {
+	        var list = (valueAccessor());
+	        $(element).sortable({
+	            update: function(event, ui) {
+	                //retrieve our actual data item
+	                var item = ui.item.tmplItem().data;
+	                console.log(item);
+	                //figure out its new position
+	                var position = ko.utils.arrayIndexOf(ui.item.parent().children(), ui.item[0]);
+	                //remove the item and add it back in the right spot
+	                if(item instanceof todoCategory){
+	                	for(var x=0; x< list().length; x++){
+	                		var categoryItem = list()[x];
+	                		if(categoryItem.order == position){
+	                			categoryItem.order=item.order;
+	                			item.order=position;
+                                viewModel.ajax(viewModel.tasksURI+"/categoryUpdate",'POST', categoryItem).done(function(){
+                                        viewModel.ajax(viewModel.tasksURI+"/categoryUpdate",'POST', item).done(function(){
+                                        	console.log("operation done")
+                                        });
+                                });
+	                			break;
+	                		}
+	                	}
+	                }
+	                if (position >= 0) {
+	                    list.remove(item);
+	                    list.splice(position, 0, item);
+	                }
+	                ui.item.remove();
+	            }
+	        });
+	    }
+	};
+
 
 ko.bindingHandlers.preventBubble = {
         init: function (element, valueAccessor) {
@@ -171,6 +207,7 @@ var todoCategory = function(data){
 	self.completedTaskCount=ko.observable(data.completedTaskCount);
 	self.enabled = data.enabled;
     self.repeater = ko.observable(data.repeater);
+    self.order=data.order;
     self.date = ko.computed(function(){
         var day = self.rawDate.getDate();
         var month = self.rawDate.getMonth()+1;
@@ -214,18 +251,10 @@ function TasksViewModel() {
 //    http://192.168.1.102:8080/TaskPaper/rest/todos/getCategories?_=1432321023986
 //    üzerindeki uzak kaynağın okunmasına izin vermiyor. (Sebep: CORS üstbilgisi
 //    'Access-Control-Allow-Origin' eksik.)
-//    var host = mobilecheck() ? "192.168.1.102" : "localhost";
     var baseUrl = getBaseUrl();
-    if(baseUrl.search("47.168.150.224")!=-1){
-    	baseUrl = 'http://'+baseUrl+':9080/TaskPaper/rest/todos';
     	
-    }else{
-    	
-    	baseUrl = 'http://'+baseUrl+':8080/TaskPaper/rest/todos';
-    }
+    baseUrl = 'http://'+baseUrl+':8080/TaskPaper/rest/todos';
     self.tasksURI = baseUrl;
-//    self.username = getCookie('username');
-//    self.password = getCookie('password');
     self.username = window.localStorage.getItem('username');
     self.password = window.localStorage.getItem('password');
     self.selectedCategoryName = ko.observable();

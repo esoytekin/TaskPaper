@@ -106,15 +106,16 @@ public class TaskpaperServicesImpl implements TaskpaperServices{
 			logger.info("Couldn't find any category. Creating Inbox...");
 			inboxCategory = createAndGetFirstCategory();
 			inboxCategory.setTaskCount(0l);
+			inboxCategory.setOrder(0);
 			categories.add(inboxCategory);
 		}
 		
-		if(!categories.get(0).getName().equals(INBOX)){
-			logger.debug("Need to reorder categories...");
-			
-			reOrderCategories(categories,inboxCategory);
-			
-		}
+//		if(!categories.get(0).getName().equals(INBOX)){
+//			logger.debug("Need to reorder categories...");
+//			
+//			reOrderCategories(categories,inboxCategory);
+//			
+//		}
 
 		return categories;
 	}

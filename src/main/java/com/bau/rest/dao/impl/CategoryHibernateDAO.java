@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -67,6 +68,7 @@ public class CategoryHibernateDAO implements CategoryDAO{
 	public List<Category> getListByUser(User user) {
 		Criteria criteria = getCurrentSession().createCriteria(Category.class);
 		criteria.add(Restrictions.eq("user", user));
+		criteria.addOrder(Order.asc("order"));
 		return criteria.list();
 	}
 

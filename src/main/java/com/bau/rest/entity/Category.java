@@ -48,6 +48,9 @@ public class Category {
 	@Enumerated(EnumType.STRING)
 	@Column(name="REPEATER")
 	private Repeater repeater;
+
+    @Column(name="ORDER_VALUE")
+    private int order;
 	
 	@Transient
 	private Long taskCount;
@@ -120,11 +123,24 @@ public class Category {
 		this.repeater = repeater;
 	}
 
-	@Override
-	public String toString() {
-		return "Category [name=" + name + ", enabled=" + enabled
-				+ ", repeater=" + repeater + "]";
-	}
+        public int getOrder(){
+            return order;
+        }
+
+        public void setOrder(int order){
+            this.order = order;
+        }
+
+		@Override
+		public String toString() {
+			return "Category [id=" + id + ", user=" + user + ", name=" + name
+					+ ", date=" + date + ", enabled=" + enabled + ", repeater="
+					+ repeater + ", order=" + order + ", taskCount="
+					+ taskCount + ", completedTaskCount=" + completedTaskCount
+					+ "]";
+		}
+
+        
 	
 	
 	

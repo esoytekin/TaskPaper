@@ -185,9 +185,10 @@ public class TodoRest {
 	
 	@RequestMapping(value="/categoryUpdate",method=RequestMethod.POST)
 	@ResponseBody
-	public void updateCategory(@RequestParam Long id, @RequestParam String name){
+	public void updateCategory(@RequestParam Long id, @RequestParam String name, @RequestParam int order){
 		Category category = taskPaperServices.getCategoryById(id);
 		category.setName(name);
+		category.setOrder(order);
 		taskPaperServices.updateCategory(category);
 		
 	}
