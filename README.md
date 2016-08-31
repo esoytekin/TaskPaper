@@ -10,7 +10,7 @@ git clone https://github.com/esoytekin/TaskPaper.git
 * open eclipse, if doesn't already exists import project
 * for any questions in mind feel free to ask me at emrahsoytekin@gmail.com
 
-
+for demo look [here](http://emrahs.duckdns.org:8080/TaskPaper)
 
 ##TODO
 * Make Shared Lists
