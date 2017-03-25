@@ -17,6 +17,11 @@ $(function(){
 
 });
 
+ko.bindingHandlers.checkBoxToggle = {
+    init: function(element,valueAccessor){
+        console.log(element);
+    }
+};
 ko.bindingHandlers.sortableList = {
 	    init: function(element, valueAccessor,allBindingAccessor,viewModel) {
 	        var list = (valueAccessor());
@@ -238,7 +243,6 @@ var customPush = function(element,array){
 
 function TasksViewModel() {
     var self = this;
-
     self.tasks = ko.observableArray([]);
     self.subtasks = ko.observableArray([]);
     self.completeTasks = ko.observableArray([]);
@@ -607,7 +611,7 @@ function TasksViewModel() {
     
     self.controllers = [];
     self.controllers.push(new todoController("Add New Item",1,self.addNewItem));
-    self.controllers.push(new todoController("Logout",2,self.logout));
+    //self.controllers.push(new todoController("Logout",2,self.logout));
 
     self.repeaters = [];
     self.repeaters.push("NO_REPEAT");

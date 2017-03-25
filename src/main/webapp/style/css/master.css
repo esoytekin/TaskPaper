@@ -36,7 +36,7 @@
 }
 
 #body {
-	background-color: #eeeeee;
+	background-color: rgba(238,238,238,0.3);
 	border-radius: 0px;
 	margin: 0 auto;
 
@@ -81,7 +81,7 @@
 
 .loader {
 	background-image: url('../img/ajax-loader.gif');
-    width: 215px;
+    width: 219px;
     height: 20px;
     background-repeat: no-repeat;
     margin: 0px auto;
