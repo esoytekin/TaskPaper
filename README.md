@@ -1,4 +1,6 @@
 # TaskPaper
+![build status](https://travis-ci.org/esoytekin/TaskPaper.svg?branch=sidedTaskDetail)
+
 
 A quick *todo list* developed by using [knockoutjs](http://knockoutjs.com), [bootstrap](http://getbootstrap.com/css/), [spring](http://spring.io/), [hibernate](http://hibernate.org/) and [maven](https://maven.apache.org/)
 
