@@ -20,16 +20,10 @@
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-<!-- 		<property name = "url"  value="jdbc:mysql://47.168.150.224/wvm224" /> -->
-<!-- 		<property name = "username"  value="emrahs" /> -->
-<!-- 		<property name = "password"  value="My5q!Mgr" /> -->
-<!-- 		<property name="url" value="jdbc:mysql://192.168.1.105/bau" /> -->
  		<property name="url" value="jdbc:mysql://localhost/bau" /> 
 		
- 		<property name="username" value="root" />
-		<property name="password" value="" />
-<!-- 		<property name="username" value="emrahs" />
-		<property name="password" value="emrah1234" /> -->
+ 		<property name="username" value="user" />
+		<property name="password" value="password" />
 	</bean>
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
