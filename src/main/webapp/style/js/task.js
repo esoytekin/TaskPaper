@@ -320,7 +320,7 @@ function TasksViewModel() {
     	console.log("getting tasks for categoryId: " + categoryId);
     	var preservedHtml = $("#task-container").html();
     	$("#task-container").fadeOut();
-    	$(".loader").slideDown();
+    	$("#taskLoader").slideDown();
     	self.ajax(self.tasksURI+"/getByCategory/"+categoryId, 'GET').done(function(data) {
     		
     		for(var i = 0; i<data.length; i++){
@@ -341,7 +341,7 @@ function TasksViewModel() {
 
     		console.log("fetching tasks completed...");
     		$("#task-container").fadeIn();
-    		$(".loader").slideUp();
+    		$("#taskLoader").slideUp();
     	});
     	
     }
@@ -355,7 +355,9 @@ function TasksViewModel() {
     };
     
     self.getCategories = function(){
+    	$("#categoryLoader").fadeIn();
     	self.ajax(self.tasksURI+"/getCategories",'GET').done(function(data){
+            $("#categoryLoader").slideUp();
     		self.categories([]);
     		var cat;
     		var selectedCatIndex;
@@ -566,8 +568,6 @@ function TasksViewModel() {
 
     /**
     self.categories = ["Inbox","Business"];
-    self.categories.push("Work");
-    self.categories.push("Food");
     self.categories.push("Logout");
     */
 
