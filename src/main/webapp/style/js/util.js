@@ -7,7 +7,6 @@ window.mobilecheck = function() {
   return check;
 }
 window.getBaseUrl = function(){
-//	/s(amp)l/i.exec("sample text")	
 	return /\/\/(.+):/i.exec(document.URL)[1]
 	
 }

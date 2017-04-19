@@ -42,6 +42,7 @@
     </div>
     <div class="row " id="body" >
     <div class="well col-md-3" style="display:block;">
+    	<div class = "loader" id="categoryLoader"></div>
         <ul class = "nav nav-pills nav-stacked " data-bind="template: { name: 'categoryTemp', foreach: categories}, sortableList:categories">
         </ul>
 
@@ -90,7 +91,7 @@
             </div>
             <br />
             <br/>
-            <div class = "loader"></div>
+            <div class = "loader" id="taskLoader"></div>
             <div id="task-container" class="col-md-12">
              <div class="list-group" data-bind="template: {name:'task-template', foreach: tasks }, fadeVisible: tasks().length > 0, sortableList: tasks">
               </div>
