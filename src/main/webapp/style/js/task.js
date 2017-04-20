@@ -671,10 +671,11 @@ function TasksViewModel() {
     	
     	if(this.description === self.selectedTask().description){
     		self.selectedTask(''); 
+            location.hash="#/"+self.selectedCategoryName();
     	}else{ 
     		self.selectedTask(this); 
-            self.getSubtasks(this); 
             $( event.target ).closest("tr").addClass("activeTask");
+            location.hash="#/"+self.selectedCategoryName()+"/" + this.id;
     	}
     }
     
@@ -877,13 +878,18 @@ function TasksViewModel() {
     }
 
     Sammy(function(){
-    	this.get("#/:category[/]?",function(){
+    	this.get("#/:category",function(){
     		  self.selectedTask('');
     		  self.selectedTaskId('');
               var categoryName = this.params.category;
     		
-              listCategories(categoryName);
-              self.getTasks(categoryName);
+              if(self.categories().length == 0)
+                      listCategories(categoryName);
+              if (self.selectedCategoryName() != categoryName || self.tasks().length == 0) {
+            	  self.getTasks(categoryName);
+            	  
+              }
+              self.selectedCategoryName(categoryName);
               return false;
             	  
     	});

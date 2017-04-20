@@ -161,7 +161,7 @@
     </div>
     
     <script type="text/html" id="task-template" >
- <a  class="list-group-item" data-bind="attr: {href: '#/'+$root.selectedCategoryName()+'/'+id}, css: { 'list-group-item-success': done(), 'list-group-item-danger': favorite(), active: id == $root.selectedTaskId()}" >
+ <a  class="list-group-item" data-bind="click: $root.taskClick, attr: {href: '#/'+$root.selectedCategoryName()+'/'+id}, css: { 'list-group-item-success': done(), 'list-group-item-danger': favorite(), active: id == $root.selectedTaskId()}" >
   <div class="input-group">
   <input  type="CHECKBOX" class="chkbx" data-on="complete" data-off="uncomplete" data-toggle="toggle" data-bind="checkBoxToggle: true,checked: done, click: $root.checkDone, preventBubble: ['click']"/>
   <span data-bind="text:description" style="padding-left: 10px"></span>
