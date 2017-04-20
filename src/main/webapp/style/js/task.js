@@ -29,7 +29,6 @@ ko.bindingHandlers.sortableList = {
 	            update: function(event, ui) {
 	                //retrieve our actual data item
 	                var item = ui.item.tmplItem().data;
-	                console.log(item);
 	                //figure out its new position
 	                var position = ko.utils.arrayIndexOf(ui.item.parent().children(), ui.item[0]);
 	                //remove the item and add it back in the right spot
@@ -39,9 +38,10 @@ ko.bindingHandlers.sortableList = {
 	                		if(categoryItem.order == position){
 	                			categoryItem.order=item.order;
 	                			item.order=position;
+	                			$("#categoryLoader").slideDown();
                                 viewModel.ajax(viewModel.tasksURI+"/categoryUpdate",'POST', categoryItem).done(function(){
                                         viewModel.ajax(viewModel.tasksURI+"/categoryUpdate",'POST', item).done(function(){
-                                        	console.log("operation done")
+                                        	$("#categoryLoader").slideUp();
                                         });
                                 });
 	                			break;
@@ -57,8 +57,51 @@ ko.bindingHandlers.sortableList = {
 	        });
 	    }
 	};
+function drag(ev) {
+    ev.dataTransfer.setData("text", ev);
+}
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+function drop(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    var regexp=/\/(\d+)/;
+    var taskId = regexp.exec(data)[1];
+    var categoryName = $( $(ev.target).find('span')[0] ).text();
+    
+    var username = window.localStorage.getItem('username');
+    var password = window.localStorage.getItem('password');
+    var baseUrl = getBaseUrl();
+	
+    baseUrl = 'http://'+baseUrl+':8080/TaskPaper/rest/todos';
+    var request = {
+          url: baseUrl+"/modify",
+          type: "POST",
+          cache: false,
+          data: {"taskId":taskId,"categoryName":categoryName},
+          beforeSend: function (xhr) {
+          	if(username && password) {
+                      xhr.setRequestHeader("Authorization", 
+                          "Basic " + btoa(username + ":" + password));
+          		
+          	}
+          },
+          error: function(jqXHR) {
+//              self.handleError(jqXHR);
+          },
+          complete: function(){
+        	  location.hash="#/"+categoryName;
+          }
+    };
+      
+      $.ajax(request).done(function(){
+    	  console.log("operation complete");
+    	  
+      });
+      
 
-
+}
 ko.bindingHandlers.preventBubble = {
         init: function (element, valueAccessor) {
             var eventName = ko.utils.unwrapObservable(valueAccessor());
