@@ -29,6 +29,7 @@ public class TodoRest {
 	public List<Category> getCategories(){
 		List<Category> categories = taskPaperServices.getCategoriesByUser();
 		return categories;
+
 	}
 	
 	@RequestMapping(value="/getByCategory/{name}",method=RequestMethod.GET)
@@ -54,6 +55,14 @@ public class TodoRest {
 		t.setFavorite(false);
 		taskPaperServices.saveTask(t);
 		return t;
+	}
+	
+	@RequestMapping(value="/modify",method=RequestMethod.POST)
+	public void moveTask(@RequestParam String taskId, @RequestParam String categoryName){
+		Task t = taskPaperServices.getTaskById(Integer.decode(taskId).longValue());
+		Category c = taskPaperServices.getCategoryByName(categoryName);
+		t.setCategory(c);
+		taskPaperServices.updateTask(t);
 	}
 	
 	@RequestMapping(value="/subtask",method=RequestMethod.POST)
