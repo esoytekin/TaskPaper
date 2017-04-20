@@ -19,7 +19,7 @@ $(function(){
 
 ko.bindingHandlers.checkBoxToggle = {
     init: function(element,valueAccessor){
-        console.log(element);
+//        console.log(element);
     }
 };
 ko.bindingHandlers.sortableList = {
@@ -262,6 +262,7 @@ function TasksViewModel() {
     self.username = window.localStorage.getItem('username');
     self.password = window.localStorage.getItem('password');
     self.selectedCategoryName = ko.observable();
+    self.selectedTaskId=ko.observable();
     self.selectedCategory= ko.observable();
     self.selectedController = ko.observable();
     self.selectedTask = ko.observable('');
@@ -296,8 +297,11 @@ function TasksViewModel() {
 //            dataType: 'json',
             data: data,
             beforeSend: function (xhr) {
-                xhr.setRequestHeader("Authorization", 
-                    "Basic " + btoa(self.username + ":" + self.password));
+            	if(self.username && self.password) {
+                        xhr.setRequestHeader("Authorization", 
+                            "Basic " + btoa(self.username + ":" + self.password));
+            		
+            	}
             },
             error: function(jqXHR) {
                 self.handleError(jqXHR);
@@ -372,12 +376,13 @@ function TasksViewModel() {
 
     			}
     		}
-    		if (!self.selectedCategoryName()){
-    			self.gotoCategory(self.categories()[0]);
-    		} else {
-    			self.gotoCategory(self.categories()[selectedCatIndex]);
 
-    		}
+//    		if (!self.selectedCategoryName()){
+//    			self.gotoCategory(self.categories()[0]);
+//    		} else {
+//    			self.gotoCategory(self.categories()[selectedCatIndex]);
+//
+//    		}
     	});
     }
     
@@ -386,6 +391,7 @@ function TasksViewModel() {
         
         var taskElem = new todoTask(self.newTaskDescription(),new Date());
         self.newTaskDescription('');
+        self.selectedTaskId('');
         taskElem.categoryName = self.selectedCategoryName();
         
             //self.tasks.unshift(taskElem);
@@ -493,7 +499,9 @@ function TasksViewModel() {
     self.getSubtasks = function(task){
     	self.subtasks([]);
     	self.completeSubtasks([]);
+    	$("#subtask-loader").fadeIn();
     	self.ajax(self.tasksURI + "/subtask",'GET',task).done(function(data){
+            $("#subtask-loader").slideUp();
     		for(var i = 0; i<data.length; i++){ 
     			var subTaskElem = new todoTask2(data[i]);
     			if(!subTaskElem.done()){ 
@@ -851,11 +859,98 @@ function TasksViewModel() {
     	}
 
     }
+    
+    self.getTaskById = function(tasks, id){
+    	if(!tasks && tasks.length == 0)
+    	{
+    		console.log("no element");
+    		return undefined;
+    	}
+    	for(var i = 0; i<tasks.length; i++){
+    		var tempTask = tasks[i];
+    		if(tempTask.id === id){
+    			return tempTask;
+    		}
+    	}
+    	
+    }
 
     Sammy(function(){
     	this.get("#:category",function(){
               var categoryName = this.params.category;
     		
+              listCategories(categoryName);
+              self.getTasks(categoryName);
+            	  
+    	});
+    	
+    	this.get("#:category/:taskId",function(){
+    		var categoryName = this.params.category;
+    		var taskId = parseInt( this.params.taskId );
+    		self.selectedTaskId(taskId);
+
+
+    		if (self.categories().length < 1) {
+    			listCategories(categoryName);
+    		} 
+    		if(self.tasks().length == 0 && self.completeTasks().length == 0)
+    		{ 
+    			self.ajax(self.tasksURI+"/getByCategory/"+categoryName, 'GET').done(function(data) {
+
+    				for(var i = 0; i<data.length; i++){
+    					var taskElem = new todoTask(data[i].description,new Date(data[i].date));
+    					taskElem.id = data[i].id;
+    					taskElem.done(data[i].done);
+    					taskElem.favorite(data[i].favorite);
+    					taskElem.rawCompleteDate(new Date(data[i].completeDate));
+    					taskElem.note(data[i].note);
+    					taskElem.subTaskCount(data[i].subTaskCount);
+    					if(taskElem.done()){
+    						self.completeTasks.push(taskElem);
+    					}else{
+    						self.tasks.push(taskElem);
+    					}
+
+    				}	
+    				var currentTask = self.getTaskById(self.tasks(), taskId);
+    				if ( !currentTask ) {
+    					currentTask = self.getTaskById(self.completeTasks(), taskId);
+    				}
+
+
+
+    				$(".task").removeClass("activeTask");
+
+    				self.selectedTask(currentTask);
+    				self.getSubtasks(currentTask);
+    				$(event.target).closest("tr").addClass("activeTask");
+    			});
+    		} else {
+    			var currentTask = self.getTaskById(self.tasks(), taskId);
+    			if ( !currentTask ) {
+    				currentTask = self.getTaskById(self.completeTasks(), taskId);
+    			}
+
+
+
+    			$(".task").removeClass("activeTask");
+
+    			self.selectedTask(currentTask);
+    			self.getSubtasks(currentTask);
+    			$(event.target).closest("tr").addClass("activeTask");
+
+    		}
+
+
+    	});
+    	
+    	this.notFound = function (){
+    		
+    		console.log("couldn't find category...");
+    		location.hash="#Inbox"
+    	}
+    	
+    	var listCategories = function(categoryName){
               self.selectedCategoryName(categoryName);
               self.selectedTask('');
 
@@ -867,15 +962,9 @@ function TasksViewModel() {
     			self.selectedCategory(self.getCategoryByName(self.categories(), categoryName));
             	  
               }
-              self.getTasks(categoryName);
+//              self.getTasks(categoryName);
               $("#completedSlider").slideUp();
-            	  
-    	});
-    	
-    	this.notFound = function (){
     		
-    		console.log("couldn't find category...");
-    		location.hash="#Inbox"
     	}
 
     }).run();
