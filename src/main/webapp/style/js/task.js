@@ -354,8 +354,10 @@ function TasksViewModel() {
     self.gotoCategory = function(category){
 
 
+      self.selectedTask('');
+      self.selectedTaskId('');
       self.selectedCategory(category);
-      location.hash = category.name;
+      location.hash = "#/"+category.name;
     };
     
     self.getCategories = function(){
@@ -391,7 +393,6 @@ function TasksViewModel() {
         
         var taskElem = new todoTask(self.newTaskDescription(),new Date());
         self.newTaskDescription('');
-        self.selectedTaskId('');
         taskElem.categoryName = self.selectedCategoryName();
         
             //self.tasks.unshift(taskElem);
@@ -434,7 +435,7 @@ function TasksViewModel() {
     		categoryElement = new todoCategory(data);
 //    		categoryElement.id = data.id;
     		self.categories.push(categoryElement);
-                location.hash = categoryElement.name;
+                location.hash = "#/"+categoryElement.name;
     		
     	});
     	
@@ -876,17 +877,26 @@ function TasksViewModel() {
     }
 
     Sammy(function(){
-    	this.get("#:category",function(){
+    	this.get("#/:category[/]?",function(){
+    		  self.selectedTask('');
+    		  self.selectedTaskId('');
               var categoryName = this.params.category;
     		
               listCategories(categoryName);
               self.getTasks(categoryName);
+              return false;
             	  
     	});
     	
-    	this.get("#:category/:taskId",function(){
+    	this.get("#/:category/:taskId",function(){
     		var categoryName = this.params.category;
-    		var taskId = parseInt( this.params.taskId );
+    		var taskId = ( this.params.taskId );
+    		if (taskId == "undefined") {
+    			location.hash = "#/"+categoryName;
+    			return false;
+    			
+    		}
+    		taskId = parseInt(taskId);
     		self.selectedTaskId(taskId);
 
 
@@ -918,6 +928,10 @@ function TasksViewModel() {
     				}
 
 
+    				if (currentTask.done()){
+
+    					$("#completedSlider").show();
+    				}
 
     				$(".task").removeClass("activeTask");
 
@@ -931,6 +945,10 @@ function TasksViewModel() {
     				currentTask = self.getTaskById(self.completeTasks(), taskId);
     			}
 
+    			if (currentTask.done()){
+    				
+                    $("#completedSlider").show();
+    			}
 
 
     			$(".task").removeClass("activeTask");
@@ -947,7 +965,7 @@ function TasksViewModel() {
     	this.notFound = function (){
     		
     		console.log("couldn't find category...");
-    		location.hash="#Inbox"
+    		location.hash="#/Inbox"
     	}
     	
     	var listCategories = function(categoryName){
