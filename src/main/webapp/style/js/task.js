@@ -231,11 +231,13 @@ var todoTask2 = function(data){
 	
 }
 
-var todoController = function(name,id,event){
+var todoController = function(name,id,event,type,icon){
 	var self = this;
 	self.name=name;
 	self.id=id;
 	self.event = event;
+	self.icon = 'glyphicon-'+icon;
+	self.type = type;
 	
 	
 }
@@ -370,6 +372,7 @@ function TasksViewModel() {
     	$("#taskLoader").slideDown();
     	self.ajax(self.tasksURI+"/getByCategory/"+categoryId, 'GET').done(function(data) {
     		
+    		$('.btnCategory').removeClass('disabled');
     		for(var i = 0; i<data.length; i++){
     			var taskElem = new todoTask(data[i].description,new Date(data[i].date));
     			taskElem.id = data[i].id;
@@ -406,6 +409,7 @@ function TasksViewModel() {
     self.getCategories = function(){
     	$("#categoryLoader").fadeIn();
     	self.ajax(self.tasksURI+"/getCategories",'GET').done(function(data){
+    		$('.btnCategory').removeClass('disabled');
             $("#categoryLoader").slideUp();
     		self.categories([]);
     		var cat;
@@ -664,8 +668,8 @@ function TasksViewModel() {
     }
     
     self.controllers = [];
-    self.controllers.push(new todoController("Add New Item",1,self.addNewItem));
-    //self.controllers.push(new todoController("Logout",2,self.logout));
+    self.controllers.push(new todoController("Add New Item",1,self.addNewItem,'btn-basic', 'plus'));
+    self.controllers.push(new todoController("Logout",2,self.logout,'btn-danger','off'));
 
     self.repeaters = [];
     self.repeaters.push("NO_REPEAT");
@@ -924,6 +928,7 @@ function TasksViewModel() {
 
     Sammy(function(){
     	this.get("#/:category",function(){
+    		$('.btnCategory').addClass('disabled');
     		  self.selectedTask('');
     		  self.selectedTaskId('');
               var categoryName = this.params.category;
@@ -936,7 +941,8 @@ function TasksViewModel() {
               }
               if (self.selectedCategoryName() != categoryName || self.tasks().length == 0) {
             	  self.getTasks(categoryName);
-            	  
+              } else {
+            	  $('.btnCategory').removeClass('disabled');
               }
               self.selectedCategoryName(categoryName);
               return false;
@@ -1036,6 +1042,7 @@ function TasksViewModel() {
               }else {
             	  
     			self.selectedCategory(self.getCategoryByName(self.categories(), categoryName));
+            	  $('.btnCategory').removeClass('disabled');
             	  
               }
 //              self.getTasks(categoryName);
