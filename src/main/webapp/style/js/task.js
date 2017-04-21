@@ -928,7 +928,6 @@ function TasksViewModel() {
     		  self.selectedTaskId('');
               var categoryName = this.params.category;
     		
-              self.selectedCategoryName(categoryName);
               if(self.categories().length == 0) {
                       listCategories(categoryName);
               } else {
@@ -939,6 +938,7 @@ function TasksViewModel() {
             	  self.getTasks(categoryName);
             	  
               }
+              self.selectedCategoryName(categoryName);
               return false;
             	  
     	});
