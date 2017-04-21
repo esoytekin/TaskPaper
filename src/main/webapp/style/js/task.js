@@ -363,8 +363,10 @@ function TasksViewModel() {
     	self.completeTasks([]);
     	if(self.selectedCategory()){
     		var taskCount = self.selectedCategory().totalTaskCount();
-    		if(!taskCount || taskCount == 0)
+    		if(!taskCount || taskCount == 0){
+    			$('.btnCategory').removeClass('disabled');
     			return;
+    		}
     	}
     	console.log("getting tasks for categoryId: " + categoryId);
     	var preservedHtml = $("#task-container").html();
