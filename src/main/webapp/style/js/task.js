@@ -419,8 +419,10 @@ function TasksViewModel() {
     					selectedCatIndex = i;
     				}
 
+
     			}
     		}
+    		self.selectedCategory(self.getCategoryByName(self.categories(), self.selectedCategoryName()));
 
 //    		if (!self.selectedCategoryName()){
 //    			self.gotoCategory(self.categories()[0]);
@@ -926,13 +928,17 @@ function TasksViewModel() {
     		  self.selectedTaskId('');
               var categoryName = this.params.category;
     		
-              if(self.categories().length == 0)
+              self.selectedCategoryName(categoryName);
+              if(self.categories().length == 0) {
                       listCategories(categoryName);
+              } else {
+            	  
+            	  self.selectedCategory(self.getCategoryByName(self.categories(), categoryName));
+              }
               if (self.selectedCategoryName() != categoryName || self.tasks().length == 0) {
             	  self.getTasks(categoryName);
             	  
               }
-              self.selectedCategoryName(categoryName);
               return false;
             	  
     	});
@@ -951,7 +957,10 @@ function TasksViewModel() {
 
     		if (self.categories().length < 1) {
     			listCategories(categoryName);
-    		} 
+    		}  else {
+    			
+            	  self.selectedCategory(self.getCategoryByName(self.categories(), categoryName));
+    		}
     		if(self.tasks().length == 0 && self.completeTasks().length == 0)
     		{ 
     			self.ajax(self.tasksURI+"/getByCategory/"+categoryName, 'GET').done(function(data) {
