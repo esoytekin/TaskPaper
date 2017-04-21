@@ -46,9 +46,13 @@
         <ul class = "nav nav-pills nav-stacked " data-bind="template: { name: 'categoryTemp', foreach: categories}, sortableList:categories">
         </ul>
 
+		<hr />
         <ul class = "nav nav-pills nav-stacked" data-bind="foreach:controllers" >
         	<li>
-        	<a href="javascript://" data-bind="text:name,click: event"></a>
+        	<a href="javascript://" data-bind="click: event" class="btnCategory btn" style="text-align:left">
+        	<span data-bind="css: icon" class="glyphicon"></span>
+        	<span data-bind="text:name"></span>
+        	</a>
         	</li>
         </ul>
     </div>
@@ -206,7 +210,11 @@
 	
 	<script type="text/html" id="categoryTemp" >
 <li data-bind="drop:{value:$root.draggedTask},css: {active: name == $root.selectedCategoryName()}" ondrop="drop(event)" ondragover="allowDrop(event)"> 
-   <a  data-bind=" attr: {href:'#/'+name}"><span data-bind="text: name"></span><span class="badge" style="float:right;" data-bind="text:taskCount()==0 ? '' : taskCount"></span></a>
+   <a class='btnCategory btn'  style='text-align:left;' data-bind=" attr: {href:'#/'+name}">
+	<span class="glyphicon glyphicon-align-justify"></span>
+    <span data-bind="text: name"></span>
+    <span class="badge" style="float:right;" data-bind="text:taskCount()==0 ? '' : taskCount"></span>
+   </a>
 </li>
     </script>
     
