@@ -212,7 +212,7 @@
 <li data-bind="drop:{value:$root.draggedTask},css: {active: name == $root.selectedCategoryName()}" ondrop="drop(event)" ondragover="allowDrop(event)"> 
    <a class='btnCategory btn'  style='text-align:left;' data-bind=" attr: {href:'#/'+name}">
 	<span class="glyphicon glyphicon-align-justify"></span>
-    <span data-bind="text: name"></span>
+    <span class = "catText" data-bind="text: name"></span>
     <span class="badge" style="float:right;" data-bind="text:taskCount()==0 ? '' : taskCount"></span>
    </a>
 </li>

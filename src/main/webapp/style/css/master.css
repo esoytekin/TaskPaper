@@ -93,3 +93,11 @@
 .hidden {
 	display:none;
 }
+
+.catText {
+	text-overflow: ellipsis;
+    width: 70%;
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-grid;
+}
