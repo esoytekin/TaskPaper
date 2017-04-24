@@ -68,7 +68,7 @@ function drop(ev) {
     var data = ev.dataTransfer.getData("text");
     var regexp=/\/(\d+)/;
     var taskId = regexp.exec(data)[1];
-    var categoryName = $( $(ev.target).find('span')[1] ).text();
+    var categoryName = $( $(ev.target).closest('a').find('span')[1] ).text();
     
     var username = window.localStorage.getItem('username');
     var password = window.localStorage.getItem('password');
