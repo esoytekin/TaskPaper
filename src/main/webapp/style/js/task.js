@@ -994,6 +994,12 @@ function TasksViewModel() {
     				}
 
 
+                                if(!currentTask){
+                                    console.log("couldn't find task with id: " + taskId);
+                                    location.hash = "#/"+categoryName;
+                                    return;
+                                }
+
     				if (currentTask.done()){
 
     					$("#completedSlider").show();
@@ -1010,6 +1016,12 @@ function TasksViewModel() {
     			if ( !currentTask ) {
     				currentTask = self.getTaskById(self.completeTasks(), taskId);
     			}
+
+                        if(!currentTask){
+                            console.log("couldn't find task with id: " + taskId);
+                            location.hash = "#/"+categoryName;
+                            return;
+                        }
 
     			if (currentTask.done()){
     				
