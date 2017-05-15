@@ -167,7 +167,7 @@
     <script type="text/html" id="task-template" >
  <a  class="list-group-item" draggable="true" data-bind="ondragstart: drag(id),click: $root.taskClick, attr: {href: '#/'+$root.selectedCategoryName()+'/'+id}, css: { 'list-group-item-success': done(), 'list-group-item-danger': favorite(), active: id == $root.selectedTaskId()}" >
   <div class="input-group">
-  <input  type="CHECKBOX" class="chkbx" data-on="complete" data-off="uncomplete" data-toggle="toggle" data-bind="checkBoxToggle: true,checked: done, click: $root.checkDone, preventBubble: ['click']"/>
+  <input  type="CHECKBOX" class="chkbx" data-bind="checkBoxToggle: true,checked: done, click: $root.checkDone, preventBubble: ['click']"/>
   <span data-bind="text:description" style="padding-left: 10px"></span>
   <span class="badge" style="margin-left:12px"  data-bind="text:subTaskCount()>0 ? subTaskCount : ''"></span>
   <span class="input-group-btn">
@@ -211,7 +211,7 @@
 	<script type="text/html" id="categoryTemp" >
 <li data-bind="drop:{value:$root.draggedTask},css: {active: name == $root.selectedCategoryName()}" ondrop="drop(event)" ondragover="allowDrop(event)"> 
    <a class='btnCategory btn'  style='text-align:left;' data-bind=" attr: {href:'#/'+name}">
-	<span class="glyphicon glyphicon-align-justify"></span>
+	<span class="sortableTitleBar glyphicon glyphicon-align-justify" data-bind="preventBubble: ['click']"></span>
     <span class = "catText" data-bind="text: name"></span>
     <span class="badge" style="float:right;" data-bind="text:taskCount()==0 ? '' : taskCount"></span>
    </a>

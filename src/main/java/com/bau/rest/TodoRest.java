@@ -58,6 +58,7 @@ public class TodoRest {
 	}
 	
 	@RequestMapping(value="/modify",method=RequestMethod.POST)
+	@ResponseBody
 	public void moveTask(@RequestParam String taskId, @RequestParam String categoryName){
 		Task t = taskPaperServices.getTaskById(Integer.decode(taskId).longValue());
 		Category c = taskPaperServices.getCategoryByName(categoryName);

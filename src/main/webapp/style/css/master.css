@@ -101,3 +101,7 @@
     overflow: hidden;
     display: inline-grid;
 }
+.sortableTitleBar:hover {
+	cursor: move;
+	color: red;
+}

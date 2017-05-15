@@ -22,10 +22,20 @@ ko.bindingHandlers.checkBoxToggle = {
 //        console.log(element);
     }
 };
+ko.bindingHandlers.draggableList = {
+		init: function(element, valueAccessor, allBindingAccessor, viewModel){
+			
+		},
+		update: function(element, valueAccessor, allBindingAccessor, viewModel){
+
+		}
+}
 ko.bindingHandlers.sortableList = {
 	    init: function(element, valueAccessor,allBindingAccessor,viewModel) {
 	        var list = (valueAccessor());
 	        $(element).sortable({
+	        	handle: ".sortableTitleBar",
+	        	cursor: "move",
 	            update: function(event, ui) {
 	                //retrieve our actual data item
 	                var item = ui.item.tmplItem().data;
@@ -38,10 +48,10 @@ ko.bindingHandlers.sortableList = {
 	                		if(categoryItem.order == position){
 	                			categoryItem.order=item.order;
 	                			item.order=position;
-	                			$("#categoryLoader").slideDown();
+	                			$('.btnCategory').addClass('disabled');
                                 viewModel.ajax(viewModel.tasksURI+"/categoryUpdate",'POST', categoryItem).done(function(){
                                         viewModel.ajax(viewModel.tasksURI+"/categoryUpdate",'POST', item).done(function(){
-                                        	$("#categoryLoader").slideUp();
+                                        	$('.btnCategory').removeClass('disabled');
                                         });
                                 });
 	                			break;
@@ -89,6 +99,7 @@ function drop(ev) {
           },
           error: function(jqXHR) {
 //              self.handleError(jqXHR);
+        	  console.log(jqXHR);
           },
           complete: function(){
         	  location.hash="#/"+categoryName;
@@ -994,11 +1005,11 @@ function TasksViewModel() {
     				}
 
 
-                                if(!currentTask){
-                                    console.log("couldn't find task with id: " + taskId);
-                                    location.hash = "#/"+categoryName;
-                                    return;
-                                }
+    				if(!currentTask){
+    					console.log("couldn't find task with id: " + taskId);
+    					location.hash = "#/"+categoryName;
+    					return;
+    				}
 
     				if (currentTask.done()){
 
@@ -1017,11 +1028,11 @@ function TasksViewModel() {
     				currentTask = self.getTaskById(self.completeTasks(), taskId);
     			}
 
-                        if(!currentTask){
-                            console.log("couldn't find task with id: " + taskId);
-                            location.hash = "#/"+categoryName;
-                            return;
-                        }
+    			if(!currentTask){
+    				console.log("couldn't find task with id: " + taskId);
+    				location.hash = "#/"+categoryName;
+    				return;
+    			}
 
     			if (currentTask.done()){
     				
