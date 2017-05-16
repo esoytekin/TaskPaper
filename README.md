@@ -6,8 +6,8 @@ A quick *todo list* developed by using [knockoutjs](http://knockoutjs.com), [boo
 # Installation
 * clone project into your eclipse workspace using:
 git clone https://github.com/esoytekin/TaskPaper.git
-* run mvn clean package
-* open eclipse, if doesn't already exists import project
+* run mvn package
+* run mvn tomcat:run
 * for any questions in mind feel free to ask me at emrahsoytekin@gmail.com
 
 for demo look [here](http://emrahs.duckdns.org:8080/TaskPaper)
