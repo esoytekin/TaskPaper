@@ -13,9 +13,9 @@ git clone https://github.com/esoytekin/TaskPaper.git
 for demo look [here](http://emrahs.duckdns.org:8080/TaskPaper)
 
 ## TODO
-[] Make Shared Lists
-[] Add Contrubutors 
-[] Define Rules
-[] add reminders
-[] add repetitive tasks
-[] add file attachments
+* Make Shared Lists
+* Add Contrubutors 
+* Define Rules
+* add reminders
+* add repetitive tasks
+* add file attachments
