@@ -11,6 +11,7 @@ git clone https://github.com/esoytekin/TaskPaper.git
 * for any questions in mind feel free to ask me at emrahsoytekin@gmail.com
 
 for demo look [here](http://emrahs.duckdns.org:8080/TaskPaper)
+You can login with credentials: [username : admin], [password: admin]
 
 ## TODO
 * Make Shared Lists
